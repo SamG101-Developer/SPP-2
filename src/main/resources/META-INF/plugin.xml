@@ -1,0 +1,16 @@
+<idea-plugin>
+    <id>src.SPP-2</id>
+    <name>SPP-Lang</name>
+    <vendor email="samuelgardner101@gmail.com" url="https://samuelgardner101.wixsite.com/spp-lang">spp-lang</vendor>
+    <description>Code analysis and highlighting for the S++ language.</description>
+    <depends>com.intellij.modules.platform</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType
+            name="Spp File"
+            implementationClass="org.intellij.sdk.language.SppFileType"
+            fieldName="INSTANCE"
+            language="Spp"
+            extensions="spp"
+        />
+    </extensions>
+</idea-plugin>

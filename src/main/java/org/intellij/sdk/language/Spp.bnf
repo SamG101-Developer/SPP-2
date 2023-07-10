@@ -1,0 +1,122 @@
+{
+    parserClass = "org.intellij.sdk.language.parser.SppParser"
+    extends = "com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix = "Spp"
+    psiImplClassSuffix = "Impl"
+    psiPackage="org.intellij.sdk.language.psi"
+    psiImplPackage="org.intellij.sdk.language.psi.impl"
+
+    elementTypeHolderClass = "org.intellij.sdk.language.psi.SppTypes"
+    elementTypeClass = "org.intellij.sdk.language.psi.SppElementType"
+    tokenTypeClass = "org.intellij.sdk.language.psi.SppTokenType"
+}
+
+
+Program ::= ModulePrototype <<eof>>
+
+ModulePrototype ::= AccessModifier? KW_MOD ModuleIdentifier TK_SEMICOLON ModuleImplementation
+ModuleImplementation ::= ImportBlock? ModuleMember*
+ModuleIdentifier ::= Identifier (TK_DBL_COLON Identifier)*
+ModuleMember ::= FunctionPrototype | EnumPrototype | ClassPrototype | SupPrototype
+
+ImportBlock ::= ImportStatement+
+ImportStatement ::= KW_USE ImportIdentifier ImportWhat TK_SEMICOLON
+ImportIdentifier ::= (Identifier TK_DBL_COLON)+
+ImportWhat ::= ImportAll | ImportSome | ImportOne
+ImportAll ::= TK_STAR
+ImportSome ::= TK_BRACE_L ImportType (TK_COMMA ImportType)+ TK_BRACE_R
+ImportOne ::= ImportType
+ImportType ::= Identifier ImportAlias?
+ImportAlias ::= TK_AS Identifier
+
+AccessModifier ::= KW_PUB | KW_PRIV | KW_PROT
+ClassPrototype ::= Decorators? AccessModifier? KW_CLS ClassIdentifier TypeGenericParameters? ClassMetaclass? WhereBlock? TK_BRACE_L ClassImplementation TK_BRACE_R
+ClassMetaclass ::= Kw_WITH TypeIdentifier
+ClassImplementation ::= ClassMember*
+ClassMember ::= ClassAttribute | ClassAttributeStatic
+ClassAttribute ::= AccessModifier? KW_MUT? ClassAttributeIdentifier TK_COLON TypeIdentifier TK_SEMICOLON
+ClassAttributeStatic ::= AccessModifier? KW_MUT? KW_STATIC ClassAttributeStaticIdentifier TK_EQUALS Expression TK_SEMICOLON
+ClassIdentifier ::= Identifier
+ClassAttributeIdentifier ::= Identifier
+ClassAttributeStaticIdentifier ::= Identifier
+
+SupPrototype ::= KW_SUP (SupPrototypeWithInherit | SupPrototypeNormal)
+SupPrototypeNormal ::= TypeGenericParameters? SupIdentifier WhereBlock? TK_BRACE_L SupImplementation TK_BRACE_R
+SupPrototypeWithInherit ::= TypeGenericParameters? SupIdentifier KW_FOR SupIdentifier WhereBlock? TK_BRACE_L SupImplementation TK_BRACE_R
+SupImplementation ::= SupMember*
+SupMember ::= SupMethodPrototype | SupTypedef
+SupIdentifier ::= TypeIdentifier
+SupTypedef ::= AccessModifier? StatementTypedef
+SupMethodPrototype ::= FunctionPrototype
+
+EnumPrototype ::= AccessModifier? KW_ENUM EnumIdentifier TypeGenericParameters? WhereBlock? TK_BRACE_L EnumImplementation TK_BRACE_R
+EnumImplementation ::= EnumMember (TK_COMMA EnumMember)* TK_SEMICOLON
+EnumMember ::= EnumMemberIdentifier (TK_EQUALS Expression)?
+EnumMemberIdentifier ::= Identifier
+EnumIdentifier ::= Identifier
+
+FunctionPrototype ::= Decorators? AccessModifier? KW_ASYNC? KW_FN FunctionIdentifier TypeGenericParameters? FunctionParameters TK_ARROW_R TypeIdentifiers WhereBlock? ValueGuard? TK_BRACE_L FunctionImplementation TK_BRACE_R
+FunctionImplementation ::= Statement*
+FunctionIdentifier ::= Identifier
+
+FunctionCallArguments ::= TK_PAREN_L FunctionCallArgumentsNormalThenNamed TK_PAREN_R
+FunctionCallArgumentsNormalThenNamed ::= FunctionCallNormalArguments | FunctionCallNamedArguments
+FunctionCallNormalArguments ::= FunctionCallNormalArgument (TK_COMMA FunctionCallArgumentsNormalThenNamed)?
+FunctionCallNamedArguments ::= FunctionCallNamedArgument (TK_COMMA FunctionCallNamedArgument)*
+FunctionCallNormalArgument ::= ParameterPassingConvention? OperatorIdentifierVariadic? NonAssignmentExpression
+FunctionCallNamedArgument ::= Identifier TK_EQUALS ParameterPassingConvention? NonAssignmentExpression
+
+FunctionParameters ::= TK_PAREN_L FunctionParametersRequiredThenOptional TK_PAREN_R
+FunctionParametersRequiredThenOptional ::= FunctionParametersRequired | FunctionParametersOptional | FunctionParameterVariadic
+FunctionParametersOptionalThenVariadic ::= FunctionParametersOptional | FunctionParameterVariadic
+FunctionParametersRequired ::= FunctionParameterRequired (TK_COMMA FunctionParametersRequiredThenOptional)?
+FunctionParametersOptional ::= FunctionParameterOptional (TK_COMMA FunctionParametersOptionalThenVariadic)?
+FunctionParameterRequired ::= KW_MUT? FunctionParameterIdentifier TK_COLON ParameterPassingConvention? TypeIdentifier
+FunctionParameterOptional ::= FunctionParameterRequired TK_EQUALS Expression
+FunctionParameterVariadic ::= OperatorIdentifierVariadic FunctionParameterRequired
+FunctionParameterIdentifier ::= Identifier
+
+WhereBlock ::= KW_WHERE TK_BRACKET_L WhereConstraint (TK_COMMA WhereConstraint)* TK_BRACKET_R
+WhereConstraint ::= TypeIdentifiers TK_COLON TypeIdentifier (TK_AMPERSAND TypeIdentifier)*
+ValueGuard ::= KW_IF Expression
+
+Decorator ::= TK_AT DecoratorIdentifier TypeGenericArguments? FunctionCallArguments?
+Decorators ::= Decorator (TK_COMMA Decorator)*
+DecoratorIdentifier ::= TypeIdentifier  //?
+
+Expressions ::= Expression (TK_COMMA Expression)*
+Expression ::= ExpressionAssignment
+NonAssignmentExpression ::= ExpressionNullCoalescing
+ExpressionAssignment ::= ExpressionAssignmentSingle | ExpressionAssignmentMultiple
+ExpressionAssignmentSingle ::= ExpressionNullCoalescing OperatorIdentifierAssignment ExpressionAssignmentSingle
+ExpressionAssignmentMultiple ::= ExpressionNullCoalescing (TK_COMMA ExpressionNullCoalescing)* TK_EQUALS ExpressionAssignment
+ExpressionNullCoalescing ::= ExpressionLogicalOr (TK_DBL_QUESTION ExpressionNullCoalescing)?
+ExpressionLogicalOr ::= ExpressionLogicalAnd (TK_DBL_PIPE ExpressionLogicalOr)?
+ExpressionLogicalAnd ::= ExpressionBitwiseOr (TK_DBL_AMPERSAND ExpressionLogicalAnd)?
+ExpressionBitwiseOr ::= ExpressionBitwiseXor (TK_PIPE ExpressionBitwiseOr)?
+ExpressionBitwiseXor ::= ExpressionBitwiseAnd (TK_CARET ExpressionBitwiseXor)?
+ExpressionBitwiseAnd ::= ExpressionEquality (TK_AMPERSAND ExpressionBitwiseAnd)?
+ExpressionEquality ::= ExpressionRelational (OperatorIdentifierEquality ExpressionEquality)?
+ExpressionRelational ::= ExpressionShift (OperatorIdentifierRelational ExpressionRelational)?
+ExpressionShift ::= ExpressionRotate (OperatorIdentifierShift ExpressionShift)?
+ExpressionRotate ::= ExpressionAdditive (OperatorIdentifierRotate ExpressionRotate)?
+ExpressionAdditive ::= ExpressionMultiplicative (OperatorIdentifierAdditive ExpressionAdditive)?
+ExpressionMultiplicative ::= ExpressionPower (OperatorIdentifierMultiplicative ExpressionMultiplicative)?
+ExpressionPower ::= ExpressionPipe (TK_DBL_STAR ExpressionPower)?
+ExpressionPipe ::= ExpressionUnary (TK_ARROW_PIPE ExpressionPipe)?
+ExpressionUnary ::= OperatorIdentifierUnary* ExpressionPostfix
+ExpressionPostfix ::= ExpressionPrimary OperatorIdentifierPostfix*
+ExpressionPrimary ::= Identifier | Literal | Lambda | TypeIdentifierSingle | ExpressionParenthesised | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope
+ExpressionParenthesised ::= TK_PAREN_L Expression TK_PAREN_R
+ExpressionPlaceholder ::= TK_UNDERSCORE
+
+Lambda ::= KW_ASYNC? LambdaCaptureList? LambdaParameters? TK_ARROW_FAT_R LambdaImplementation
+LambdaCaptureList ::= TK_BRACKET_L LambdaCaptureItem (TK_COMMA LambdaCaptureItem)* TK_BRACKET_R
+LambdaCaptureItem ::= (Identifier TK_EQUALS)? ParameterPassingConvention? Identifier
+LambdaParameters ::= TK_PAREN_L LambdaParametersRequired TK_PAREN_R
+LambdaParametersRequired ::= LambdaParameterRequired (TK_COMMA LambdaParametersRequired)*
+LambdaParameterRequired ::= KW_MUT? FunctionParameterIdentifier
+LambdaImplementation ::= Expression
+
+TypeSelfPrefix ::= KW_SELF

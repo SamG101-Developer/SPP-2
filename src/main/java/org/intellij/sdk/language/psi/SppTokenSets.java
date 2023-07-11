@@ -14,7 +14,7 @@ public interface SppTokenSets {
             SppTypes.KW_SELF);
     TokenSet OPERATORS = TokenSet.create(
             SppTypes.TK_DBL_AMPERSAND, SppTypes.TK_DBL_AMPERSAND_EQUALS, SppTypes.TK_DBL_PIPE,
-            SppTypes.TK_DBL_PIPE_EQUALS, SppTypes.TK_EXCLAMATION, SppTypes.TK_AMPERSTAND, SppTypes.TK_AMPERSTAND_EQUALS,
+            SppTypes.TK_DBL_PIPE_EQUALS, SppTypes.TK_EXCLAMATION, SppTypes.TK_AMPERSAND, SppTypes.TK_AMPERSAND_EQUALS,
             SppTypes.TK_PIPE, SppTypes.TK_PIPE_EQUALS, SppTypes.TK_CARET, SppTypes.TK_CARET_EQUALS, SppTypes.TK_TILDE,
             SppTypes.TK_DBL_ANGLE_L, SppTypes.TK_DBL_ANGLE_L_EQUALS, SppTypes.TK_DBL_ANGLE_R,
             SppTypes.TK_DBL_ANGLE_R_EQUALS, SppTypes.TK_TRIP_ANGLE_L, SppTypes.TK_TRIP_ANGLE_L_EQUALS,

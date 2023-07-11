@@ -12,5 +12,9 @@
             language="Spp"
             extensions="spp"
         />
+        <lang.parserDefinition
+            language="Spp"
+            implementationClass="org.intellij.sdk.language.SppParserDefinition"
+        />
     </extensions>
 </idea-plugin>

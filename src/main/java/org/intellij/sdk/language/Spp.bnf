@@ -10,6 +10,120 @@
     elementTypeHolderClass = "org.intellij.sdk.language.psi.SppTypes"
     elementTypeClass = "org.intellij.sdk.language.psi.SppElementType"
     tokenTypeClass = "org.intellij.sdk.language.psi.SppTokenType"
+
+    tokens = [
+        TK_DBL_AMPERSAND = "&&"
+        TK_DBL_AMPERSAND_EQUALS = "&&="
+        TK_DBL_PIPE = "||"
+        TK_DBL_PIPE_EQUALS = "||="
+        TK_EXCLAMATION = "!"
+
+        TK_AMPERSTAND = "&"
+        TK_AMPERSTAND_EQUALS = "&="
+        TK_PIPE = "|"
+        TK_PIPE_EQUALS = "|="
+        TK_CARET = "^"
+        TK_CARET_EQUALS = "^="
+        TK_TILDE = "~"
+        TK_DBL_ANGLE_L = "<<"
+        TK_DBL_ANGLE_L_EQUALS = "<<="
+        TK_DBL_ANGLE_R = ">>"
+        TK_DBL_ANGLE_R_EQUALS = ">>="
+        TK_TRIP_ANGLE_L = "<<<"
+        TK_TRIP_ANGLE_L_EQUALS = "<<<="
+        TK_TRIP_ANGLE_R = ">>>"
+        TK_TRIP_ANGLE_R_EQUALS = ">>>="
+
+        TK_DOUBLE_EQUALS = "=="
+        TK_EXCLAMATION_EQUALS = "!="
+        TK_ANGLE_L = "<"
+        TK_ANGLE_L_EQUALS = "<="
+        TK_ANGLE_R = ">"
+        TK_ANGLE_R_EQUALS = ">="
+        TK_ARROW_FAT_DBL = "<=>"
+
+        TK_PLUS = "+"
+        TK_PLUS_EQUALS = "+="
+        TK_HYPHEN = "-"
+        TK_HYPHEN_EQUALS = "-="
+        TK_ASTERISK = "*"
+        TK_ASTERISK_EQUALS = "*="
+        TK_FORWARD_SLASH = "/"
+        TK_FORWARD_SLASH_EQUALS = "/="
+        TK_PERCENT = "%"
+        TK_PERCENT_EQUALS = "%="
+        TK_DBL_FORWARD_SLASH = "//"
+        TK_DBL_FORWARD_SLASH_EQUALS = "//="
+        TK_DBL_ASTRIX = "**"
+        TK_DBL_ASTRIX_EQUALS = "**="
+
+        TK_PAREN_L = "("
+        TK_PAREN_R = ")"
+        TK_BRACKET_L = "["
+        TK_BRACKET_R = "]"
+        TK_BRACE_L = "{"
+        TK_BRACE_R = "}"
+
+        TK_QUESTION = "?"
+        TK_DBL_QUESTION = "??"
+        TK_DBL_QUESTION_EQUALS = "??="
+
+        TK_PIPE_ARROW = "|>"
+        TK_DBL_DOT = ".."
+        TK_TRIP_DOT = "..."
+        TK_COLON = ":"
+
+        TK_DOT = "."
+        TK_DBL_COLON = "::"
+        TK_COMMA = ","
+        TK_EQUALS = "="
+        TK_ARROW_R = "->"
+        TK_ARROW_FAT_R = "=>"
+        TK_AT = "@"
+        TK_UNDERSCORE = "_"
+        TK_SEMICOLON = ";"
+
+        KW_MOD = "mod"
+        KW_USE = "use"
+        KE_ENUM = "enum"
+        KW_IN = "in"
+        KW_PUB = "pub"
+        KW_PROT = "prot"
+        KW_PRIV = "priv"
+        KW_ASYNC = "async"
+        KW_FN = "fn"
+        KW_MUT = "mut"
+        KW_LET = "let"
+        KW_IF = "if"
+        KW_ELIF = "elif"
+        KW_ELSE = "else"
+        KW_WHILE = "while"
+        KW_FOR = "for"
+        KW_DO = "do"
+        KW_MATCH = "match"
+        KW_RET = "ret"
+        KW_YIELD = "yield"
+        KW_CLS = "cls"
+        KW_AWAIT = "await"
+        KW_WHERE = "where"
+        KW_TRUE = "true"
+        KW_FALSE = "false"
+        KW_AS = "as"
+        KW_SUP = "sup"
+        KW_WITH = "with"
+        KW_BREAK = "break"
+        KW_CONT = "cont"
+        KW_SELF = "Self"
+
+        LX_IDENTIFIER = "regexp:([_a-zA-Z][_a-zA-Z0-9]*)"
+        LX_BIN_DIGITS = "regexp:(0b[01]+)"
+        LX_HEX_DIGITS = "regexp:(0x[0-9a-fA-F]+)"
+        LX_DEC_DIGITS = "regexp:([0-9]+)"
+        LX_DBL_QUOTE_STR = "regexp:(\".*\")"
+        LX_SNG_QUOTE_CHR = "regexp:('.?')"
+        LX_REGEX = "regexp:(r\".*\")"
+        LX_TAG = "regexp:('[a-zA-Z0-9_]+)"
+    ]
 }
 
 
@@ -32,7 +146,7 @@ ImportAlias ::= TK_AS Identifier
 
 AccessModifier ::= KW_PUB | KW_PRIV | KW_PROT
 ClassPrototype ::= Decorators? AccessModifier? KW_CLS ClassIdentifier TypeGenericParameters? ClassMetaclass? WhereBlock? TK_BRACE_L ClassImplementation TK_BRACE_R
-ClassMetaclass ::= Kw_WITH TypeIdentifier
+ClassMetaclass ::= KW_WITH TypeIdentifier
 ClassImplementation ::= ClassMember*
 ClassMember ::= ClassAttribute | ClassAttributeStatic
 ClassAttribute ::= AccessModifier? KW_MUT? ClassAttributeIdentifier TK_COLON TypeIdentifier TK_SEMICOLON
@@ -77,8 +191,9 @@ FunctionParameterOptional ::= FunctionParameterRequired TK_EQUALS Expression
 FunctionParameterVariadic ::= OperatorIdentifierVariadic FunctionParameterRequired
 FunctionParameterIdentifier ::= Identifier
 
-WhereBlock ::= KW_WHERE TK_BRACKET_L WhereConstraint (TK_COMMA WhereConstraint)* TK_BRACKET_R
+WhereBlock ::= KW_WHERE TK_BRACKET_L WhereConstraintChain TK_BRACKET_R
 WhereConstraint ::= TypeIdentifiers TK_COLON TypeIdentifier (TK_AMPERSAND TypeIdentifier)*
+WhereConstraintChain ::= WhereConstraint (TK_COMMA WhereConstraintChain)*
 ValueGuard ::= KW_IF Expression
 
 Decorator ::= TK_AT DecoratorIdentifier TypeGenericArguments? FunctionCallArguments?
@@ -107,8 +222,7 @@ ExpressionPower ::= ExpressionPipe (TK_DBL_STAR ExpressionPower)?
 ExpressionPipe ::= ExpressionUnary (TK_ARROW_PIPE ExpressionPipe)?
 ExpressionUnary ::= OperatorIdentifierUnary* ExpressionPostfix
 ExpressionPostfix ::= ExpressionPrimary OperatorIdentifierPostfix*
-ExpressionPrimary ::= Identifier | Literal | Lambda | TypeIdentifierSingle | ExpressionParenthesised | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope
-ExpressionParenthesised ::= TK_PAREN_L Expression TK_PAREN_R
+ExpressionPrimary ::= Identifier | Literal | Lambda | TypeIdentifierSingle | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope
 ExpressionPlaceholder ::= TK_UNDERSCORE
 
 Lambda ::= KW_ASYNC? LambdaCaptureList? LambdaParameters? TK_ARROW_FAT_R LambdaImplementation
@@ -119,4 +233,97 @@ LambdaParametersRequired ::= LambdaParameterRequired (TK_COMMA LambdaParametersR
 LambdaParameterRequired ::= KW_MUT? FunctionParameterIdentifier
 LambdaImplementation ::= Expression
 
-TypeSelfPrefix ::= KW_SELF
+TypeIdentifier ::= TypeIdentifierSingle | TypeIdentifierTuple
+TypeIdentifierSingle ::= (KW_SELF TK_DBL_COLON)? Identifier (TK_DBL_COLON (GenericIdentifier | Number))*
+TypeIdentifierTuple ::= TK_PAREN_L TypeIdentifiers TK_PAREN_R
+TypeIdentifiers ::= TypeIdentifier (TK_COMMA TypeIdentifier)*
+
+TypeGenericArguments ::= TK_ANGLE_L TypeGenericArgumentsNormalThenNamed TK_ANGLE_R
+TypeGenericArgumentsNormalThenNamed ::= TypeGenericArgumentsNormal | TypeGenericArgumentsNamed
+TypeGenericArgumentsNormal ::= TypeGenericArgumentNormal (TK_COMMA TypeGenericArgumentsNormalThenNamed)?
+TypeGenericArgumentsNamed ::= TypeGenericArgumentNamed (TK_COMMA TypeGenericArgumentNamed)*
+TypeGenericArgumentNormal ::= TypeIdentifier
+TypeGenericArgumentNamed ::= Identifier TK_EQUALS TypeIdentifier
+
+TypeGenericParameters ::= TK_ANGLE_L TypeGenericParametersRequiredThenOptional TK_ANGLE_R
+TypeGenericParametersRequiredThenOptional ::= TypeGenericParametersRequired | TypeGenericParametersOptional | TypeGenericParametersVariadic
+TypeGenericParametersOptionalThenVariadic ::= TypeGenericParametersOptional | TypeGenericParametersVariadic
+TypeGenericParametersRequired ::= TypeGenericParameterRequired (TK_COMMA TypeGenericParametersRequiredThenOptional)?
+TypeGenericParametersOptional ::= TypeGenericParameterOptional (TK_COMMA TypeGenericParametersOptionalThenVariadic)?
+TypeGenericParametersVariadic ::= TypeGenericParameterVariadic (TK_COMMA TypeGenericParameterVariadic)*
+TypeGenericParameterRequired ::= Identifier TypeGenericParameterInlineConstraint?
+TypeGenericParameterOptional ::= TypeGenericParameterRequired TK_EQUALS TypeIdentifier
+TypeGenericParameterVariadic ::= OperatorIdentifierVariadic TypeGenericParameterRequired
+TypeGenericParameterInlineConstraint ::= TK_COLON WhereConstraintChain?
+
+StatementInlineDefinition ::= KW_LET LocalVariableIdentifier TK_EQUALS Expression TK_COMMA
+StatementIf ::= StatementIfBranch StatementElifBranch* StatementElseBranch?
+StatementIfBranch ::= KW_IF StatementInlineDefinition* Expression StatementBlock
+StatementElifBranch ::= KW_ELIF StatementInlineDefinition* Expression StatementBlock
+StatementElseBranch ::= KW_ELSE StatementBlock
+StatementWhile ::= KW_WHILE Expression StatementLoopTag? StatementBlock
+StatementFor ::= KW_FOR LocalVariableIdentifiers KW_IN Expression StatementLoopTag? StatementBlock
+StatementDo ::= KW_DO StatementLoopTag? StatementBlock KW_WHILE Expression
+StatementMatch ::= KW_MATCH Expression StatementCases
+StatementCaseExpression ::= Expression
+StatementCaseExpressions ::= StatementCaseExpression (TK_COMMA StatementCaseExpression)*
+StatementCase ::= StatementCaseExpressions ValueGuard TK_ARROW_FAT_R StatementBlock
+StatementWith ::= KW_WITH Expression (KW_AS LocalVariableIdentifier)? StatementBlock
+StatementReturn ::= KW_RET Expression? TK_SEMICOLON
+StatementYield ::= KW_YIELD Expression? TK_SEMICOLON
+StatementTypedef ::= KW_USE GenericIdentifier KW_AS TypeIdentifier TK_SEMICOLON
+StatementBreak ::= KW_BREAK StatementTagIdentifier? Expression? TK_SEMICOLON
+StatementContinue ::= KW_CONTINUE StatementTagIdentifier? TK_SEMICOLON
+StatementLoopTag ::= KW_AS StatementTagIdentifier
+StatementTagIdentifier ::= LX_TAG
+StatementBlock ::= TK_BRACE_L Statement* TK_BRACE_R
+StatementCases ::= TK_BRACE_L StatementCase* TK_BRACE_R
+StatementLet ::= KW_LET LocalVariableIdentifiers ((TK_COLON TypeIdentifier) | (TK_EQUALS Expression)) TK_SEMICOLON
+StatementExpression ::= Expression TK_SEMICOLON
+StatementNewScope ::= TK_BRACE_L Statement* TK_BRACE_R
+Statement ::= StatementIf | StatementWhile | StatementFor | StatementDo | StatementMatch | StatementWith | StatementReturn | StatementYield | StatementTypedef | StatementBreak | StatementContinue | StatementLet | StatementExpression | StatementNewScope | FunctionPrototype
+
+LocalVariableIdentifier ::= KW_MUT? Identifier
+LocalVariableIdentifiers ::= LocalVariableIdentifier (TK_COMMA LocalVariableIdentifier)*
+
+Identifier ::= LX_IDENTIFIER
+GenericIdentifier ::= LX_IDENTIFIER TypeGenericArguments?
+
+PostfixOperatorFunctionCall ::= FunctionCallArguments
+PostfixOperatorMemberAccess ::= OperatorIdentifierMemberAccess (GenericIdentifier | Number)
+PostfixOperatorIndexAccess ::= TK_BRACKET_L Expression TK_BRACKET_R
+PostfixOperatorStructInitializer ::= TK_BRACE_L PostfixOperatorStructInitializerField (TK_COMMA PostfixOperatorStructInitializerField)* TK_BRACE_R
+PostfixOperatorStructInitializerField ::= PostfixOperatorStructInitializerFieldName (TK_EQUALS Expression)?
+PostfixOperatorStructInitializerFieldName ::= KW_SUP | KW_ELSE | Identifier
+
+OperatorIdentifierAssignment ::= TK_DBL_PIPE_EQUALS | TK_DBL_AMPERSAND_EQUALS | TK_PIPE_EQUALS | TK_AMPERSAND_EQUALS | TK_CARET_EQUALS | TK_DBL_ANGLE_L_EQUALS | TK_DBL_ANGLE_R_EQUALS | TK_TRIP_ANGLE_L_EQUALS | TK_TRIP_ANGLE_R_EQUALS | TK_PLUS_EQUALS | TK_HYPEHN_EQUALS | TK_ASTERISK_EQUALS | TK_FORWARD_SLASH_EQUALS | TK_DBL_FORWARD_SLASH_EQUALS | TK_PERCENT_EQUALS | TK_DBL_ASTERISK_EQUALS | TK_DBL_QUESTION_MARK_EQUALS
+OperatorIdentifierEquality ::= TK_DBL_EQUALS | TK_EXCLAMATION_MARK_EQUALS
+OperatorIdentifierRelational ::= TK_ANGLE_L | TK_ANGLE_R | TK_ANGLE_L_EQUALS | TK_ANGLE_R_EQUALS | TK_ARROW_FAT_DBL
+OperatorIdentifierShift ::= TK_DBL_ANGLE_L | TK_DBL_ANGLE_R
+OperatorIdentifierRotate ::= TK_TRIP_ANGLE_L | TK_TRIP_ANGLE_R
+OperatorIdentifierAdditive ::= TK_PLUS | TK_HYPEHN
+OperatorIdentifierMultiplicative ::= TK_ASTERISK | TK_FORWARD_SLASH | TK_DBL_FORWARD_SLASH | TK_PERCENT
+OperatorIdentifierUnary ::= TK_PLUS | TK_HYPEHN | TK_EXCLAMATION_MARK | TK_TILDE | KW_AWAIT
+OperatorIdentifierVariadic ::= TK_TRIPLE_DOT
+OperatorIdentifierMemberAccess ::= TK_DOT
+OperatorIdentifierPostfix ::= PostfixOperatorFunctionCall | PostfixOperatorMemberAccess | PostfixOperatorIndexAccess | PostfixOperatorStructInitializer | TK_QUESTION
+ParameterPassingConvention ::= TK_AMPERSAND KW_MUT?
+
+Literal ::= LiteralNumber | LiteralString | LiteralChar | LiteralBool | LiteralTuple | LiteralRegex // | LiteralRange
+LiteralNumber ::= LiteralNumberBase02 | LiteralNumberBase10 | LiteralNumberBase16
+LiteralString ::= LX_STRING
+LiteralChar ::= LX_CHAR
+LiteralBool ::= KW_TRUE | KW_FALSE
+LiteralTuple ::= TK_PAREN_L Expressions? TK_PAREN_R
+LiteralRegex ::= LX_REGEX
+// LiteralRange ::= Expression TK_TRIPLE_DOT Expression
+
+LiteralNumberBase02 ::= LX_BIN_DIGITS
+LiteralNumberBase10 ::= Number
+LiteralNumberBase16 ::= LX_HEX_DIGITS
+
+Number ::= NumericInteger NumericDecimal? NumericComplex? NumericExponent?
+NumericInteger ::= LX_DEC_DIGITS
+NumericDecimal ::= TK_DOT LX_DEC_DIGITS
+NumericComplex ::= "i"
+NumericExponent ::= "e" OperatorIdentifierAdditive? NumericInteger

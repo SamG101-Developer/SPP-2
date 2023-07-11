@@ -16,5 +16,9 @@
             language="Spp"
             implementationClass="org.intellij.sdk.language.SppParserDefinition"
         />
+        <lang.syntaxHighlighterFactory
+            language="Spp"
+            implementationClass="org.intellij.sdk.language.SppSyntaxHighlighterFactory"
+        />
     </extensions>
 </idea-plugin>

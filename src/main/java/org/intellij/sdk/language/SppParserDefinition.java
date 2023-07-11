@@ -37,7 +37,7 @@ public class SppParserDefinition implements ParserDefinition {
 
     @Override
     public @NotNull TokenSet getCommentTokens() {
-        return null;
+        return SppTokenSets.COMMENTS;
     }
 
     @Override

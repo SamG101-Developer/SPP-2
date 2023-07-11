@@ -18,8 +18,8 @@
         TK_DBL_PIPE_EQUALS = "||="
         TK_EXCLAMATION = "!"
 
-        TK_AMPERSTAND = "&"
-        TK_AMPERSTAND_EQUALS = "&="
+        TK_AMPERSAND = "&"
+        TK_AMPERSAND_EQUALS = "&="
         TK_PIPE = "|"
         TK_PIPE_EQUALS = "|="
         TK_CARET = "^"
@@ -138,7 +138,7 @@ ImportBlock ::= ImportStatement+
 ImportStatement ::= KW_USE ImportIdentifier ImportWhat TK_SEMICOLON
 ImportIdentifier ::= (Identifier TK_DBL_COLON)+
 ImportWhat ::= ImportAll | ImportSome | ImportOne
-ImportAll ::= TK_STAR
+ImportAll ::= TK_ASTERISK
 ImportSome ::= TK_BRACE_L ImportType (TK_COMMA ImportType)+ TK_BRACE_R
 ImportOne ::= ImportType
 ImportType ::= Identifier ImportAlias?
@@ -174,14 +174,14 @@ FunctionPrototype ::= Decorators? AccessModifier? KW_ASYNC? KW_FN FunctionIdenti
 FunctionImplementation ::= Statement*
 FunctionIdentifier ::= Identifier
 
-FunctionCallArguments ::= TK_PAREN_L FunctionCallArgumentsNormalThenNamed TK_PAREN_R
+FunctionCallArguments ::= TK_PAREN_L FunctionCallArgumentsNormalThenNamed? TK_PAREN_R
 FunctionCallArgumentsNormalThenNamed ::= FunctionCallNormalArguments | FunctionCallNamedArguments
 FunctionCallNormalArguments ::= FunctionCallNormalArgument (TK_COMMA FunctionCallArgumentsNormalThenNamed)?
 FunctionCallNamedArguments ::= FunctionCallNamedArgument (TK_COMMA FunctionCallNamedArgument)*
 FunctionCallNormalArgument ::= ParameterPassingConvention? OperatorIdentifierVariadic? NonAssignmentExpression
 FunctionCallNamedArgument ::= Identifier TK_EQUALS ParameterPassingConvention? NonAssignmentExpression
 
-FunctionParameters ::= TK_PAREN_L FunctionParametersRequiredThenOptional TK_PAREN_R
+FunctionParameters ::= TK_PAREN_L FunctionParametersRequiredThenOptional? TK_PAREN_R
 FunctionParametersRequiredThenOptional ::= FunctionParametersRequired | FunctionParametersOptional | FunctionParameterVariadic
 FunctionParametersOptionalThenVariadic ::= FunctionParametersOptional | FunctionParameterVariadic
 FunctionParametersRequired ::= FunctionParameterRequired (TK_COMMA FunctionParametersRequiredThenOptional)?
@@ -222,7 +222,7 @@ ExpressionPower ::= ExpressionPipe (TK_DBL_STAR ExpressionPower)?
 ExpressionPipe ::= ExpressionUnary (TK_ARROW_PIPE ExpressionPipe)?
 ExpressionUnary ::= OperatorIdentifierUnary* ExpressionPostfix
 ExpressionPostfix ::= ExpressionPrimary OperatorIdentifierPostfix*
-ExpressionPrimary ::= Identifier | Literal | Lambda | TypeIdentifierSingle | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope
+ExpressionPrimary ::= Literal | Lambda | TypeIdentifierSingle | Identifier | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope
 ExpressionPlaceholder ::= TK_UNDERSCORE
 
 Lambda ::= KW_ASYNC? LambdaCaptureList? LambdaParameters? TK_ARROW_FAT_R LambdaImplementation
@@ -238,14 +238,14 @@ TypeIdentifierSingle ::= (KW_SELF TK_DBL_COLON)? Identifier (TK_DBL_COLON (Gener
 TypeIdentifierTuple ::= TK_PAREN_L TypeIdentifiers TK_PAREN_R
 TypeIdentifiers ::= TypeIdentifier (TK_COMMA TypeIdentifier)*
 
-TypeGenericArguments ::= TK_ANGLE_L TypeGenericArgumentsNormalThenNamed TK_ANGLE_R
+TypeGenericArguments ::= TK_ANGLE_L TypeGenericArgumentsNormalThenNamed? TK_ANGLE_R
 TypeGenericArgumentsNormalThenNamed ::= TypeGenericArgumentsNormal | TypeGenericArgumentsNamed
 TypeGenericArgumentsNormal ::= TypeGenericArgumentNormal (TK_COMMA TypeGenericArgumentsNormalThenNamed)?
 TypeGenericArgumentsNamed ::= TypeGenericArgumentNamed (TK_COMMA TypeGenericArgumentNamed)*
 TypeGenericArgumentNormal ::= TypeIdentifier
 TypeGenericArgumentNamed ::= Identifier TK_EQUALS TypeIdentifier
 
-TypeGenericParameters ::= TK_ANGLE_L TypeGenericParametersRequiredThenOptional TK_ANGLE_R
+TypeGenericParameters ::= TK_ANGLE_L TypeGenericParametersRequiredThenOptional? TK_ANGLE_R
 TypeGenericParametersRequiredThenOptional ::= TypeGenericParametersRequired | TypeGenericParametersOptional | TypeGenericParametersVariadic
 TypeGenericParametersOptionalThenVariadic ::= TypeGenericParametersOptional | TypeGenericParametersVariadic
 TypeGenericParametersRequired ::= TypeGenericParameterRequired (TK_COMMA TypeGenericParametersRequiredThenOptional)?
@@ -278,7 +278,7 @@ StatementLoopTag ::= KW_AS StatementTagIdentifier
 StatementTagIdentifier ::= LX_TAG
 StatementBlock ::= TK_BRACE_L Statement* TK_BRACE_R
 StatementCases ::= TK_BRACE_L StatementCase* TK_BRACE_R
-StatementLet ::= KW_LET LocalVariableIdentifiers ((TK_COLON TypeIdentifier) | (TK_EQUALS Expression)) TK_SEMICOLON
+StatementLet ::= KW_LET LocalVariableIdentifiers ((TK_COLON TypeIdentifier) | (TK_EQUALS NonAssignmentExpression)) TK_SEMICOLON
 StatementExpression ::= Expression TK_SEMICOLON
 StatementNewScope ::= TK_BRACE_L Statement* TK_BRACE_R
 Statement ::= StatementIf | StatementWhile | StatementFor | StatementDo | StatementMatch | StatementWith | StatementReturn | StatementYield | StatementTypedef | StatementBreak | StatementContinue | StatementLet | StatementExpression | StatementNewScope | FunctionPrototype
@@ -303,7 +303,7 @@ OperatorIdentifierShift ::= TK_DBL_ANGLE_L | TK_DBL_ANGLE_R
 OperatorIdentifierRotate ::= TK_TRIP_ANGLE_L | TK_TRIP_ANGLE_R
 OperatorIdentifierAdditive ::= TK_PLUS | TK_HYPEHN
 OperatorIdentifierMultiplicative ::= TK_ASTERISK | TK_FORWARD_SLASH | TK_DBL_FORWARD_SLASH | TK_PERCENT
-OperatorIdentifierUnary ::= TK_PLUS | TK_HYPEHN | TK_EXCLAMATION_MARK | TK_TILDE | KW_AWAIT
+OperatorIdentifierUnary ::= TK_PLUS | TK_HYPEHN | TK_EXCLAMATION | TK_TILDE | KW_AWAIT
 OperatorIdentifierVariadic ::= TK_TRIPLE_DOT
 OperatorIdentifierMemberAccess ::= TK_DOT
 OperatorIdentifierPostfix ::= PostfixOperatorFunctionCall | PostfixOperatorMemberAccess | PostfixOperatorIndexAccess | PostfixOperatorStructInitializer | TK_QUESTION
@@ -311,8 +311,8 @@ ParameterPassingConvention ::= TK_AMPERSAND KW_MUT?
 
 Literal ::= LiteralNumber | LiteralString | LiteralChar | LiteralBool | LiteralTuple | LiteralRegex // | LiteralRange
 LiteralNumber ::= LiteralNumberBase02 | LiteralNumberBase10 | LiteralNumberBase16
-LiteralString ::= LX_STRING
-LiteralChar ::= LX_CHAR
+LiteralString ::= LX_DBL_QUOTE_STR
+LiteralChar ::= LX_SNG_QUOTE_CHR
 LiteralBool ::= KW_TRUE | KW_FALSE
 LiteralTuple ::= TK_PAREN_L Expressions? TK_PAREN_R
 LiteralRegex ::= LX_REGEX

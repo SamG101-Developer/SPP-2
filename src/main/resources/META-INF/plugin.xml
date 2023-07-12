@@ -4,6 +4,7 @@
     <vendor email="samuelgardner101@gmail.com" url="https://samuelgardner101.wixsite.com/spp-lang">spp-lang</vendor>
     <description>Code analysis and highlighting for the S++ language.</description>
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
     <extensions defaultExtensionNs="com.intellij">
         <fileType
             name="Spp File"
@@ -19,6 +20,13 @@
         <lang.syntaxHighlighterFactory
             language="Spp"
             implementationClass="org.intellij.sdk.language.SppSyntaxHighlighterFactory"
+        />
+        <colorSettingsPage
+            implementation="org.intellij.sdk.language.SppColorSettingsPage"
+        />
+        <annotator
+            language="Spp"
+            implementationClass="org.intellij.sdk.language.SppAnnotator"
         />
     </extensions>
 </idea-plugin>

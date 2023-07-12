@@ -14,12 +14,22 @@ public class SppSyntaxHighlighter extends SyntaxHighlighterBase {
         return new SppLexerAdapter();
     }
 
+    public static TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey("SPP_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+    public static TextAttributesKey OPERATION_SIGN = TextAttributesKey.createTextAttributesKey("SPP_OPERATION_SIGN", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    public static TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("SPP_STRING", DefaultLanguageHighlighterColors.STRING);
+    public static TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("SPP_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+    public static TextAttributesKey NUMBER = TextAttributesKey.createTextAttributesKey("SPP_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
+
+    public static TextAttributesKey FUNCTION_IDENTIFIER = TextAttributesKey.createTextAttributesKey("SPP_FUNCTION_IDENTIFIER", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+    public static TextAttributesKey TYPE_IDENTIFIER = TextAttributesKey.createTextAttributesKey("SPP_TYPE_IDENTIFIER", DefaultLanguageHighlighterColors.CLASS_NAME);
+//    public static TextAttributesKey GENERIC_IDENTIFIER = TextAttributesKey.createTextAttributesKey("SPP_GENERIC_IDENTIFIER", DefaultLanguageHighlighterColors.);
+
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
-    private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{DefaultLanguageHighlighterColors.KEYWORD};
-    private static final TextAttributesKey[] OPERATOR_KEYS = new TextAttributesKey[]{DefaultLanguageHighlighterColors.OPERATION_SIGN};
-    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{DefaultLanguageHighlighterColors.STRING};
-    private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{DefaultLanguageHighlighterColors.LINE_COMMENT};
-    private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{DefaultLanguageHighlighterColors.NUMBER};
+    private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
+    private static final TextAttributesKey[] OPERATOR_KEYS = new TextAttributesKey[]{OPERATION_SIGN};
+    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
+    private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
+    private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{NUMBER};
 
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {

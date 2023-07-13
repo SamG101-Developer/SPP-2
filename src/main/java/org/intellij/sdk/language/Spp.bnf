@@ -235,7 +235,7 @@ LambdaParameterRequired ::= KW_MUT? FunctionParameterIdentifier
 LambdaImplementation ::= NonAssignmentExpression
 
 TypeIdentifier ::= TypeIdentifierSingle | TypeIdentifierTuple
-TypeIdentifierSingle ::= (KW_SELF TK_DBL_COLON)? GenericIdentifier (TK_DBL_COLON (GenericIdentifier | Number))*
+TypeIdentifierSingle ::= KW_SELF | ((KW_SELF TK_DBL_COLON)? GenericIdentifier (TK_DBL_COLON (GenericIdentifier | Number))*)
 TypeIdentifierTuple ::= TK_PAREN_L TypeIdentifiers TK_PAREN_R
 TypeIdentifiers ::= TypeIdentifier (TK_COMMA TypeIdentifier)*
 

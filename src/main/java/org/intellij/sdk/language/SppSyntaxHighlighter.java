@@ -22,7 +22,7 @@ public class SppSyntaxHighlighter extends SyntaxHighlighterBase {
 
     public static TextAttributesKey FUNCTION_IDENTIFIER = TextAttributesKey.createTextAttributesKey("SPP_FUNCTION_IDENTIFIER", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
     public static TextAttributesKey TYPE_IDENTIFIER = TextAttributesKey.createTextAttributesKey("SPP_TYPE_IDENTIFIER", DefaultLanguageHighlighterColors.CLASS_NAME);
-//    public static TextAttributesKey GENERIC_IDENTIFIER = TextAttributesKey.createTextAttributesKey("SPP_GENERIC_IDENTIFIER", DefaultLanguageHighlighterColors.);
+//    public static TextAttributesKey GENERIC_IDENTIFIER = TextAttributesKey.createTextAttributesKey("SPP_GENERIC_IDENTIFIER", DefaultLanguageHighlighterColors.CLASS_NAME);
 
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
     private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};

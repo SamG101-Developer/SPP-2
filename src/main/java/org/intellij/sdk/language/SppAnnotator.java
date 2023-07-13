@@ -31,11 +31,11 @@ public class SppAnnotator implements Annotator {
                 setHighlighting(element, holder, SppSyntaxHighlighter.TYPE_IDENTIFIER);
             }
 
-            @Override
-            public void visitGenericIdentifier(@NotNull SppGenericIdentifier element) {
-                super.visitGenericIdentifier(element);
-                setHighlighting(element, holder, SppSyntaxHighlighter.GENERIC_IDENTIFIER);
-            }
+//            @Override
+//            public void visitGenericIdentifier(@NotNull SppGenericIdentifier element) {
+//                super.visitGenericIdentifier(element);
+//                setHighlighting(element, holder, SppSyntaxHighlighter.GENERIC_IDENTIFIER);
+//            }
         });
     }
 

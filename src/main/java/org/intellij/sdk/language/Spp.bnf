@@ -131,7 +131,7 @@
 
 Program ::= ModulePrototype <<eof>>
 
-ModulePrototype ::= AccessModifier? KW_MOD ModuleIdentifier TK_SEMICOLON ModuleImplementation
+ModulePrototype ::= KW_MOD ModuleIdentifier TK_SEMICOLON ModuleImplementation
 ModuleImplementation ::= ImportBlock? ModuleMember*
 ModuleIdentifier ::= Identifier (TK_DBL_COLON Identifier)*
 ModuleMember ::= FunctionPrototype | EnumPrototype | ClassPrototype | SupPrototype
@@ -146,13 +146,12 @@ ImportOne ::= ImportType
 ImportType ::= Identifier ImportAlias?
 ImportAlias ::= TK_AS Identifier
 
-AccessModifier ::= KW_PUB | KW_PRIV | KW_PROT
-ClassPrototype ::= Decorators? AccessModifier? KW_CLS ClassIdentifier TypeGenericParameters? ClassMetaclass? WhereBlock? TK_BRACE_L ClassImplementation TK_BRACE_R
+ClassPrototype ::= Decorators? KW_CLS ClassIdentifier TypeGenericParameters? ClassMetaclass? WhereBlock? TK_BRACE_L ClassImplementation TK_BRACE_R
 ClassMetaclass ::= KW_WITH TypeIdentifier
 ClassImplementation ::= ClassMember*
 ClassMember ::= ClassAttribute | ClassAttributeStatic
-ClassAttribute ::= AccessModifier? KW_MUT? ClassAttributeIdentifier TK_COLON TypeIdentifier TK_SEMICOLON
-ClassAttributeStatic ::= AccessModifier? KW_MUT? KW_STATIC ClassAttributeStaticIdentifier TK_EQUALS NonAssignmentExpression TK_SEMICOLON
+ClassAttribute ::= KW_MUT? ClassAttributeIdentifier TK_COLON TypeIdentifier TK_SEMICOLON
+ClassAttributeStatic ::= KW_MUT? KW_STATIC ClassAttributeStaticIdentifier TK_EQUALS NonAssignmentExpression TK_SEMICOLON
 ClassIdentifier ::= Identifier
 ClassAttributeIdentifier ::= Identifier
 ClassAttributeStaticIdentifier ::= Identifier
@@ -163,16 +162,16 @@ SupPrototypeWithInherit ::= TypeGenericParameters? SupIdentifier KW_FOR SupIdent
 SupImplementation ::= SupMember*
 SupMember ::= SupMethodPrototype | SupTypedef
 SupIdentifier ::= TypeIdentifier
-SupTypedef ::= AccessModifier? StatementTypedef
+SupTypedef ::= StatementTypedef
 SupMethodPrototype ::= FunctionPrototype
 
-EnumPrototype ::= AccessModifier? KW_ENUM EnumIdentifier TypeGenericParameters? WhereBlock? TK_BRACE_L EnumImplementation TK_BRACE_R
+EnumPrototype ::= KW_ENUM EnumIdentifier TypeGenericParameters? WhereBlock? TK_BRACE_L EnumImplementation TK_BRACE_R
 EnumImplementation ::= (EnumMember (TK_COMMA EnumMember)*)? TK_SEMICOLON
 EnumMember ::= EnumMemberIdentifier (TK_EQUALS NonAssignmentExpression)?
 EnumMemberIdentifier ::= Identifier
 EnumIdentifier ::= Identifier
 
-FunctionPrototype ::= Decorators? AccessModifier? (KW_FN | KW_GN) FunctionIdentifier TypeGenericParameters? FunctionParameters TK_ARROW_R TypeIdentifiers WhereBlock? ValueGuard? TK_BRACE_L FunctionImplementation TK_BRACE_R
+FunctionPrototype ::= Decorators? (KW_FN | KW_GN) FunctionIdentifier TypeGenericParameters? FunctionParameters TK_ARROW_R TypeIdentifiers WhereBlock? ValueGuard? TK_BRACE_L FunctionImplementation TK_BRACE_R
 FunctionImplementation ::= Statement*
 FunctionIdentifier ::= Identifier
 
@@ -200,7 +199,7 @@ WhereConstraintConstraints ::= TypeIdentifier (TK_AMPERSAND TypeIdentifier)*
 ValueGuard ::= KW_IF NonAssignmentExpression
 
 Decorator ::= TK_AT DecoratorIdentifier TypeGenericArguments? FunctionCallArguments?
-Decorators ::= Decorator (TK_COMMA Decorator)*
+Decorators ::= Decorator*
 DecoratorIdentifier ::= TypeIdentifier  //?
 
 Expressions ::= Expression (TK_COMMA Expression)*

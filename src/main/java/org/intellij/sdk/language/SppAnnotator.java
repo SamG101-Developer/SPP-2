@@ -22,7 +22,8 @@ public class SppAnnotator implements Annotator {
             @Override
             public void visitTypeIdentifier(@NotNull SppTypeIdentifier element) {
                 super.visitTypeIdentifier(element);
-                setHighlighting(element, holder, SppSyntaxHighlighter.TYPE_IDENTIFIER);
+                if (!element.getParent().getNode().getElementType().equals(SppTypes.DECORATOR_IDENTIFIER))
+                    setHighlighting(element, holder, SppSyntaxHighlighter.TYPE_IDENTIFIER);
             }
 
             @Override
@@ -31,11 +32,29 @@ public class SppAnnotator implements Annotator {
                 setHighlighting(element, holder, SppSyntaxHighlighter.TYPE_IDENTIFIER);
             }
 
-//            @Override
-//            public void visitGenericIdentifier(@NotNull SppGenericIdentifier element) {
-//                super.visitGenericIdentifier(element);
-//                setHighlighting(element, holder, SppSyntaxHighlighter.GENERIC_IDENTIFIER);
-//            }
+            @Override
+            public void visitDecoratorIdentifier(@NotNull SppDecoratorIdentifier element) {
+                super.visitDecoratorIdentifier(element);
+                setHighlighting(element, holder, SppSyntaxHighlighter.DECORATOR_IDENTIFIER);
+            }
+
+            @Override
+            public void visitTypeGenericParameterIdentifier(@NotNull SppTypeGenericParameterIdentifier element) {
+                super.visitTypeGenericParameterIdentifier(element);
+                setHighlighting(element, holder, SppSyntaxHighlighter.GENERIC_PARAMETER_IDENTIFIER);
+            }
+
+            @Override
+            public void visitFunctionParameterIdentifier(@NotNull SppFunctionParameterIdentifier element) {
+                super.visitFunctionParameterIdentifier(element);
+                setHighlighting(element, holder, SppSyntaxHighlighter.FUNCTION_PARAMETER_IDENTIFIER);
+            }
+
+            @Override
+            public void visitPostfixOperatorMemberAccess(@NotNull SppPostfixOperatorMemberAccess element) {
+                super.visitPostfixOperatorMemberAccess(element);
+                setHighlighting(element.getLastChild(), holder, SppSyntaxHighlighter.MEMBER_IDENTIFIER);
+            }
         });
     }
 

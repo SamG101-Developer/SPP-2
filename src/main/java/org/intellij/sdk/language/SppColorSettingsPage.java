@@ -23,6 +23,10 @@ public class SppColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Number", SppSyntaxHighlighter.NUMBER),
             new AttributesDescriptor("Function identifier", SppSyntaxHighlighter.FUNCTION_IDENTIFIER),
             new AttributesDescriptor("Type identifier", SppSyntaxHighlighter.TYPE_IDENTIFIER),
+            new AttributesDescriptor("Decorator identifier", SppSyntaxHighlighter.DECORATOR_IDENTIFIER),
+            new AttributesDescriptor("Generic parameter", SppSyntaxHighlighter.GENERIC_PARAMETER_IDENTIFIER),
+            new AttributesDescriptor("Function parameter identifier", SppSyntaxHighlighter.FUNCTION_PARAMETER_IDENTIFIER),
+            new AttributesDescriptor("Member identifier", SppSyntaxHighlighter.MEMBER_IDENTIFIER),
     };
 
     @Override

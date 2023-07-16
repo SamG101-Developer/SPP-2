@@ -254,10 +254,11 @@ TypeGenericParametersOptionalThenVariadic ::= TypeGenericParametersVariadic | Ty
 TypeGenericParametersRequired ::= TypeGenericParameterRequired (TK_COMMA TypeGenericParametersRequiredThenOptional)?
 TypeGenericParametersOptional ::= TypeGenericParameterOptional (TK_COMMA TypeGenericParametersOptionalThenVariadic)?
 TypeGenericParametersVariadic ::= TypeGenericParameterVariadic (TK_COMMA TypeGenericParameterVariadic)*
-TypeGenericParameterRequired ::= Identifier TypeGenericParameterInlineConstraint?
+TypeGenericParameterRequired ::= TypeGenericParameterIdentifier TypeGenericParameterInlineConstraint?
 TypeGenericParameterOptional ::= TypeGenericParameterRequired TK_EQUALS TypeIdentifier
 TypeGenericParameterVariadic ::= OperatorIdentifierVariadic TypeGenericParameterRequired
 TypeGenericParameterInlineConstraint ::= TK_COLON WhereConstraintConstraints?
+TypeGenericParameterIdentifier ::= Identifier
 
 StatementInlineDefinition ::= KW_LET LocalVariableIdentifier TK_EQUALS NonAssignmentExpression TK_COMMA
 StatementIf ::= StatementIfBranch StatementElifBranch* StatementElseBranch?

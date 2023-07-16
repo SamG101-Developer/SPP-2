@@ -34,7 +34,7 @@
         TK_TRIP_ANGLE_R = ">>>"
         TK_TRIP_ANGLE_R_EQUALS = ">>>="
 
-        TK_DOUBLE_EQUALS = "=="
+        TK_DBL_EQUALS = "=="
         TK_EXCLAMATION_EQUALS = "!="
         TK_ANGLE_L = "<"
         TK_ANGLE_L_EQUALS = "<="
@@ -90,8 +90,8 @@
         KW_PUB = "pub"
         KW_PROT = "prot"
         KW_PRIV = "priv"
-        KW_ASYNC = "async"
         KW_FN = "fn"
+        KW_GN = "gn"
         KW_MUT = "mut"
         KW_LET = "let"
         KW_IF = "if"
@@ -104,7 +104,6 @@
         KW_RET = "ret"
         KW_YIELD = "yield"
         KW_CLS = "cls"
-        KW_AWAIT = "await"
         KW_WHERE = "where"
         KW_TRUE = "true"
         KW_FALSE = "false"
@@ -114,6 +113,9 @@
         KW_BREAK = "break"
         KW_CONT = "cont"
         KW_SELF = "Self"
+
+        line_comment="regexp:(#.*)"
+        block_comment="regexp:(\"\"\"[^\"]*\"\"\")"
 
         LX_IDENTIFIER = "regexp:([_a-zA-Z][_a-zA-Z0-9]*)"
         LX_BIN_DIGITS = "regexp:(0b[01]+)"
@@ -170,7 +172,7 @@ EnumMember ::= EnumMemberIdentifier (TK_EQUALS NonAssignmentExpression)?
 EnumMemberIdentifier ::= Identifier
 EnumIdentifier ::= Identifier
 
-FunctionPrototype ::= Decorators? AccessModifier? KW_ASYNC? KW_FN FunctionIdentifier TypeGenericParameters? FunctionParameters TK_ARROW_R TypeIdentifiers WhereBlock? ValueGuard? TK_BRACE_L FunctionImplementation TK_BRACE_R
+FunctionPrototype ::= Decorators? AccessModifier? (KW_FN | KW_GN) FunctionIdentifier TypeGenericParameters? FunctionParameters TK_ARROW_R TypeIdentifiers WhereBlock? ValueGuard? TK_BRACE_L FunctionImplementation TK_BRACE_R
 FunctionImplementation ::= Statement*
 FunctionIdentifier ::= Identifier
 
@@ -226,7 +228,7 @@ ExpressionPostfix ::= ExpressionPrimary OperatorIdentifierPostfix*
 ExpressionPrimary ::= Literal | Lambda | TypeIdentifierSingle | Identifier | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope
 ExpressionPlaceholder ::= TK_UNDERSCORE
 
-Lambda ::= KW_ASYNC? LambdaCaptureList? LambdaParameters? TK_ARROW_FAT_R LambdaImplementation
+Lambda ::= LambdaCaptureList? LambdaParameters? TK_ARROW_FAT_R LambdaImplementation
 LambdaCaptureList ::= TK_BRACKET_L LambdaCaptureItem (TK_COMMA LambdaCaptureItem)* TK_BRACKET_R
 LambdaCaptureItem ::= (Identifier TK_EQUALS)? ParameterPassingConvention? Identifier
 LambdaParameters ::= TK_PAREN_L LambdaParametersRequired TK_PAREN_R
@@ -235,18 +237,18 @@ LambdaParameterRequired ::= KW_MUT? FunctionParameterIdentifier
 LambdaImplementation ::= NonAssignmentExpression
 
 TypeIdentifier ::= TypeIdentifierSingle | TypeIdentifierTuple
-TypeIdentifierSingle ::= KW_SELF | ((KW_SELF TK_DBL_COLON)? GenericIdentifier (TK_DBL_COLON (GenericIdentifier | Number))*)
+TypeIdentifierSingle ::= ((KW_SELF TK_DBL_COLON)? GenericIdentifier (TK_DBL_COLON (GenericIdentifier | Number))*) | KW_SELF
 TypeIdentifierTuple ::= TK_PAREN_L TypeIdentifiers TK_PAREN_R
 TypeIdentifiers ::= TypeIdentifier (TK_COMMA TypeIdentifier)*
 
-TypeGenericArguments ::= TK_ANGLE_L TypeGenericArgumentsNormalThenNamed? TK_ANGLE_R
+TypeGenericArguments ::= TK_BRACKET_L TypeGenericArgumentsNormalThenNamed? TK_BRACKET_R
 TypeGenericArgumentsNormalThenNamed ::= TypeGenericArgumentsNamed | TypeGenericArgumentsNormal
 TypeGenericArgumentsNormal ::= TypeGenericArgumentNormal (TK_COMMA TypeGenericArgumentsNormalThenNamed)?
 TypeGenericArgumentsNamed ::= TypeGenericArgumentNamed (TK_COMMA TypeGenericArgumentNamed)*
 TypeGenericArgumentNormal ::= TypeIdentifier
 TypeGenericArgumentNamed ::= Identifier TK_EQUALS TypeIdentifier
 
-TypeGenericParameters ::= TK_ANGLE_L TypeGenericParametersRequiredThenOptional? TK_ANGLE_R
+TypeGenericParameters ::= TK_BRACKET_L TypeGenericParametersRequiredThenOptional? TK_BRACKET_R
 TypeGenericParametersRequiredThenOptional ::= TypeGenericParametersVariadic | TypeGenericParametersOptional | TypeGenericParametersRequired
 TypeGenericParametersOptionalThenVariadic ::= TypeGenericParametersVariadic | TypeGenericParametersOptional
 TypeGenericParametersRequired ::= TypeGenericParameterRequired (TK_COMMA TypeGenericParametersRequiredThenOptional)?
@@ -292,23 +294,22 @@ GenericIdentifier ::= LX_IDENTIFIER TypeGenericArguments?
 
 PostfixOperatorFunctionCall ::= FunctionCallArguments
 PostfixOperatorMemberAccess ::= OperatorIdentifierMemberAccess (GenericIdentifier | Number)
-PostfixOperatorIndexAccess ::= TK_BRACKET_L NonAssignmentExpression TK_BRACKET_R
 PostfixOperatorStructInitializer ::= TK_BRACE_L PostfixOperatorStructInitializerFields? TK_BRACE_R
 PostfixOperatorStructInitializerFields ::= PostfixOperatorStructInitializerField (TK_COMMA PostfixOperatorStructInitializerField)*
 PostfixOperatorStructInitializerField ::= PostfixOperatorStructInitializerFieldName (TK_COLON NonAssignmentExpression)?
 PostfixOperatorStructInitializerFieldName ::= KW_SUP | KW_ELSE | Identifier
 
 OperatorIdentifierAssignment ::= TK_DBL_PIPE_EQUALS | TK_DBL_AMPERSAND_EQUALS | TK_PIPE_EQUALS | TK_AMPERSAND_EQUALS | TK_CARET_EQUALS | TK_DBL_ANGLE_L_EQUALS | TK_DBL_ANGLE_R_EQUALS | TK_TRIP_ANGLE_L_EQUALS | TK_TRIP_ANGLE_R_EQUALS | TK_PLUS_EQUALS | TK_HYPEHN_EQUALS | TK_ASTERISK_EQUALS | TK_FORWARD_SLASH_EQUALS | TK_DBL_FORWARD_SLASH_EQUALS | TK_PERCENT_EQUALS | TK_DBL_ASTERISK_EQUALS | TK_DBL_QUESTION_MARK_EQUALS
-OperatorIdentifierEquality ::= TK_DBL_EQUALS | TK_EXCLAMATION_MARK_EQUALS
+OperatorIdentifierEquality ::= TK_DBL_EQUALS | TK_EXCLAMATION_EQUALS
 OperatorIdentifierRelational ::= TK_ANGLE_L | TK_ANGLE_R | TK_ANGLE_L_EQUALS | TK_ANGLE_R_EQUALS | TK_ARROW_FAT_DBL
 OperatorIdentifierShift ::= TK_DBL_ANGLE_L | TK_DBL_ANGLE_R
 OperatorIdentifierRotate ::= TK_TRIP_ANGLE_L | TK_TRIP_ANGLE_R
-OperatorIdentifierAdditive ::= TK_PLUS | TK_HYPEHN
+OperatorIdentifierAdditive ::= TK_PLUS | TK_HYPHEN
 OperatorIdentifierMultiplicative ::= TK_ASTERISK | TK_FORWARD_SLASH | TK_DBL_FORWARD_SLASH | TK_PERCENT
-OperatorIdentifierUnary ::= TK_PLUS | TK_HYPEHN | TK_EXCLAMATION | TK_TILDE | KW_AWAIT
+OperatorIdentifierUnary ::= TK_PLUS | TK_HYPHEN | TK_EXCLAMATION | TK_TILDE
 OperatorIdentifierVariadic ::= TK_TRIP_DOT
 OperatorIdentifierMemberAccess ::= TK_DOT
-OperatorIdentifierPostfix ::= PostfixOperatorFunctionCall | PostfixOperatorMemberAccess | PostfixOperatorIndexAccess | PostfixOperatorStructInitializer | TK_QUESTION
+OperatorIdentifierPostfix ::= PostfixOperatorFunctionCall | PostfixOperatorMemberAccess | PostfixOperatorStructInitializer | TK_QUESTION
 ParameterPassingConvention ::= TK_AMPERSAND KW_MUT?
 
 Literal ::= LiteralNumber | LiteralString | LiteralChar | LiteralBool | LiteralTuple | LiteralRegex // | LiteralRange

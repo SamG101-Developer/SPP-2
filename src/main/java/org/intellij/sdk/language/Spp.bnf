@@ -24,15 +24,6 @@
         TK_PIPE_EQUALS = "|="
         TK_CARET = "^"
         TK_CARET_EQUALS = "^="
-        TK_TILDE = "~"
-        TK_DBL_ANGLE_L = "<<"
-        TK_DBL_ANGLE_L_EQUALS = "<<="
-        TK_DBL_ANGLE_R = ">>"
-        TK_DBL_ANGLE_R_EQUALS = ">>="
-        TK_TRIP_ANGLE_L = "<<<"
-        TK_TRIP_ANGLE_L_EQUALS = "<<<="
-        TK_TRIP_ANGLE_R = ">>>"
-        TK_TRIP_ANGLE_R_EQUALS = ">>>="
 
         TK_DBL_EQUALS = "=="
         TK_EXCLAMATION_EQUALS = "!="
@@ -52,10 +43,6 @@
         TK_FORWARD_SLASH_EQUALS = "/="
         TK_PERCENT = "%"
         TK_PERCENT_EQUALS = "%="
-        TK_DBL_FORWARD_SLASH = "//"
-        TK_DBL_FORWARD_SLASH_EQUALS = "//="
-        TK_DBL_ASTRIX = "**"
-        TK_DBL_ASTRIX_EQUALS = "**="
 
         TK_PAREN_L = "("
         TK_PAREN_R = ")"
@@ -65,10 +52,9 @@
         TK_BRACE_R = "}"
 
         TK_QUESTION = "?"
-        TK_DBL_QUESTION = "??"
-        TK_DBL_QUESTION_EQUALS = "??="
 
-        TK_PIPE_ARROW = "|>"
+        TK_PIPE_ARROW_L = "<|"
+        TK_PIPE_ARROW_R = "|>"
         TK_DBL_DOT = ".."
         TK_TRIP_DOT = "..."
         TK_COLON = ":"
@@ -200,27 +186,22 @@ DecoratorIdentifier ::= TypeIdentifier  //?
 
 Expressions ::= Expression (TK_COMMA Expression)*
 Expression ::= ExpressionAssignment
-NonAssignmentExpression ::= ExpressionNullCoalescing
+NonAssignmentExpression ::= ExpressionLogicalOr
 ExpressionAssignment ::= ExpressionAssignmentMultiple | ExpressionAssignmentSingle
-ExpressionAssignmentSingle ::= ExpressionNullCoalescing (OperatorIdentifierAssignment ExpressionNullCoalescing)?
-ExpressionAssignmentMultiple ::= ExpressionNullCoalescing (TK_COMMA ExpressionNullCoalescing)* TK_EQUALS ExpressionNullCoalescing
-ExpressionNullCoalescing ::= ExpressionLogicalOr (TK_DBL_QUESTION ExpressionNullCoalescing)?
+ExpressionAssignmentSingle ::= NonAssignmentExpression (OperatorIdentifierAssignment NonAssignmentExpression)?
+ExpressionAssignmentMultiple ::= NonAssignmentExpression (TK_COMMA NonAssignmentExpression)* TK_EQUALS NonAssignmentExpression
 ExpressionLogicalOr ::= ExpressionLogicalAnd (TK_DBL_PIPE ExpressionLogicalOr)?
 ExpressionLogicalAnd ::= ExpressionBitwiseOr (TK_DBL_AMPERSAND ExpressionLogicalAnd)?
 ExpressionBitwiseOr ::= ExpressionBitwiseXor (TK_PIPE ExpressionBitwiseOr)?
 ExpressionBitwiseXor ::= ExpressionBitwiseAnd (TK_CARET ExpressionBitwiseXor)?
 ExpressionBitwiseAnd ::= ExpressionEquality (TK_AMPERSAND ExpressionBitwiseAnd)?
 ExpressionEquality ::= ExpressionRelational (OperatorIdentifierEquality ExpressionEquality)?
-ExpressionRelational ::= ExpressionShift (OperatorIdentifierRelational ExpressionRelational)?
-ExpressionShift ::= ExpressionRotate (OperatorIdentifierShift ExpressionShift)?
-ExpressionRotate ::= ExpressionAdditive (OperatorIdentifierRotate ExpressionRotate)?
+ExpressionRelational ::= ExpressionAdditive (OperatorIdentifierRelational ExpressionRelational)?
 ExpressionAdditive ::= ExpressionMultiplicative (OperatorIdentifierAdditive ExpressionAdditive)?
-ExpressionMultiplicative ::= ExpressionPower (OperatorIdentifierMultiplicative ExpressionMultiplicative)?
-ExpressionPower ::= ExpressionPipe (TK_DBL_ASTRIX ExpressionPower)?
-ExpressionPipe ::= ExpressionUnary (TK_ARROW_PIPE ExpressionPipe)?
-ExpressionUnary ::= OperatorIdentifierUnary* ExpressionPostfix
+ExpressionMultiplicative ::= ExpressionPipe (OperatorIdentifierMultiplicative ExpressionMultiplicative)?
+ExpressionPipe ::= ExpressionPostfix (OperatorIdentifierPipe ExpressionPipe)?
 ExpressionPostfix ::= ExpressionPrimary OperatorIdentifierPostfix*
-ExpressionPrimary ::= Literal | Lambda | TypeIdentifierSingle | Identifier | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope
+ExpressionPrimary ::= Literal | Lambda | TypeIdentifierSingle | Identifier | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope | OperatorIdentifierVariadic
 ExpressionPlaceholder ::= TK_UNDERSCORE
 
 Lambda ::= LambdaCaptureList? LambdaParameters? TK_ARROW_FAT_R LambdaImplementation
@@ -233,7 +214,7 @@ LambdaImplementation ::= NonAssignmentExpression
 
 TypeIdentifier ::= TypeIdentifierSingle | TypeIdentifierTuple
 TypeIdentifierSingle ::= ((KW_SELF TK_DBL_COLON)? GenericIdentifier (TK_DBL_COLON (GenericIdentifier | Number))*) | KW_SELF
-TypeIdentifierTuple ::= TK_PAREN_L TypeIdentifiers TK_PAREN_R
+TypeIdentifierTuple ::= TK_PAREN_L TypeIdentifiers? TK_PAREN_R
 TypeIdentifiers ::= TypeIdentifier (TK_COMMA TypeIdentifier)*
 
 TypeGenericArguments ::= TK_BRACKET_L TypeGenericArgumentsNormalThenNamed? TK_BRACKET_R
@@ -298,11 +279,9 @@ PostfixOperatorStructInitializerFieldName ::= KW_SUP | KW_ELSE | Identifier
 OperatorIdentifierAssignment ::= TK_DBL_PIPE_EQUALS | TK_DBL_AMPERSAND_EQUALS | TK_PIPE_EQUALS | TK_AMPERSAND_EQUALS | TK_CARET_EQUALS | TK_DBL_ANGLE_L_EQUALS | TK_DBL_ANGLE_R_EQUALS | TK_TRIP_ANGLE_L_EQUALS | TK_TRIP_ANGLE_R_EQUALS | TK_PLUS_EQUALS | TK_HYPEHN_EQUALS | TK_ASTERISK_EQUALS | TK_FORWARD_SLASH_EQUALS | TK_DBL_FORWARD_SLASH_EQUALS | TK_PERCENT_EQUALS | TK_DBL_ASTERISK_EQUALS | TK_DBL_QUESTION_MARK_EQUALS
 OperatorIdentifierEquality ::= TK_DBL_EQUALS | TK_EXCLAMATION_EQUALS
 OperatorIdentifierRelational ::= TK_ANGLE_L | TK_ANGLE_R | TK_ANGLE_L_EQUALS | TK_ANGLE_R_EQUALS | TK_ARROW_FAT_DBL
-OperatorIdentifierShift ::= TK_DBL_ANGLE_L | TK_DBL_ANGLE_R
-OperatorIdentifierRotate ::= TK_TRIP_ANGLE_L | TK_TRIP_ANGLE_R
 OperatorIdentifierAdditive ::= TK_PLUS | TK_HYPHEN
 OperatorIdentifierMultiplicative ::= TK_ASTERISK | TK_FORWARD_SLASH | TK_DBL_FORWARD_SLASH | TK_PERCENT
-OperatorIdentifierUnary ::= TK_PLUS | TK_HYPHEN | TK_EXCLAMATION | TK_TILDE
+OperatorIdentifierPipe ::= TK_PIPE_ARROW_L | TK_PIPE_ARROW_R
 OperatorIdentifierVariadic ::= TK_TRIP_DOT
 OperatorIdentifierMemberAccess ::= TK_DOT
 OperatorIdentifierPostfix ::= PostfixOperatorFunctionCall | PostfixOperatorMemberAccess | PostfixOperatorStructInitializer | TK_QUESTION

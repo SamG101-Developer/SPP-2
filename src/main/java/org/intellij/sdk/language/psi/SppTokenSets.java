@@ -14,17 +14,17 @@ public interface SppTokenSets {
     TokenSet OPERATORS = TokenSet.create(
             SppTypes.TK_DBL_AMPERSAND, SppTypes.TK_DBL_AMPERSAND_EQUALS, SppTypes.TK_DBL_PIPE,
             SppTypes.TK_DBL_PIPE_EQUALS, SppTypes.TK_EXCLAMATION, SppTypes.TK_AMPERSAND, SppTypes.TK_AMPERSAND_EQUALS,
-            SppTypes.TK_PIPE, SppTypes.TK_PIPE_EQUALS, SppTypes.TK_CARET, SppTypes.TK_CARET_EQUALS, SppTypes.TK_TILDE,
-            SppTypes.TK_DBL_ANGLE_L, SppTypes.TK_DBL_ANGLE_L_EQUALS, SppTypes.TK_DBL_ANGLE_R,
-            SppTypes.TK_DBL_ANGLE_R_EQUALS, SppTypes.TK_TRIP_ANGLE_L, SppTypes.TK_TRIP_ANGLE_L_EQUALS,
-            SppTypes.TK_TRIP_ANGLE_R, SppTypes.TK_TRIP_ANGLE_R_EQUALS, SppTypes.TK_DBL_EQUALS,
+            SppTypes.TK_PIPE, SppTypes.TK_PIPE_EQUALS, SppTypes.TK_CARET, SppTypes.TK_CARET_EQUALS,
+            SppTypes.TK_DBL_ANGLE_L_EQUALS,
+            SppTypes.TK_DBL_ANGLE_R_EQUALS, SppTypes.TK_TRIP_ANGLE_L_EQUALS,
+            SppTypes.TK_TRIP_ANGLE_R_EQUALS, SppTypes.TK_DBL_EQUALS,
             SppTypes.TK_EXCLAMATION_EQUALS, SppTypes.TK_ANGLE_L, SppTypes.TK_ANGLE_L_EQUALS, SppTypes.TK_ANGLE_R,
             SppTypes.TK_ANGLE_R_EQUALS, SppTypes.TK_ARROW_FAT_DBL, SppTypes.TK_PLUS, SppTypes.TK_PLUS_EQUALS,
             SppTypes.TK_HYPHEN, SppTypes.TK_HYPHEN_EQUALS, SppTypes.TK_ASTERISK, SppTypes.TK_ASTERISK_EQUALS,
             SppTypes.TK_FORWARD_SLASH, SppTypes.TK_FORWARD_SLASH_EQUALS, SppTypes.TK_PERCENT,
             SppTypes.TK_PERCENT_EQUALS, SppTypes.TK_DBL_FORWARD_SLASH, SppTypes.TK_DBL_FORWARD_SLASH_EQUALS,
-            SppTypes.TK_DBL_ASTRIX, SppTypes.TK_DBL_ASTRIX_EQUALS, SppTypes.TK_PAREN_L, SppTypes.TK_PAREN_R,
+            SppTypes.TK_PAREN_L, SppTypes.TK_PAREN_R,
             SppTypes.TK_BRACKET_L, SppTypes.TK_BRACKET_R, SppTypes.TK_BRACE_L, SppTypes.TK_BRACE_R,
-            SppTypes.TK_QUESTION, SppTypes.TK_DBL_QUESTION, SppTypes.TK_DBL_QUESTION_EQUALS, SppTypes.TK_PIPE_ARROW);
+            SppTypes.TK_QUESTION);
     TokenSet NUMBERS = TokenSet.create(SppTypes.LX_BIN_DIGITS, SppTypes.LX_DEC_DIGITS, SppTypes.LX_HEX_DIGITS);
 }

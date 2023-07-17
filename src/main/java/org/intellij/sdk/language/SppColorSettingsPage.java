@@ -27,6 +27,7 @@ public class SppColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Generic parameter", SppSyntaxHighlighter.GENERIC_PARAMETER_IDENTIFIER),
             new AttributesDescriptor("Function parameter identifier", SppSyntaxHighlighter.FUNCTION_PARAMETER_IDENTIFIER),
             new AttributesDescriptor("Member identifier", SppSyntaxHighlighter.MEMBER_IDENTIFIER),
+            new AttributesDescriptor("Function named argument identifier", SppSyntaxHighlighter.FUNCTION_NAMED_ARG_IDENTIFIER),
     };
 
     @Override

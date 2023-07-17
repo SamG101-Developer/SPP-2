@@ -55,6 +55,12 @@ public class SppAnnotator implements Annotator {
                 super.visitPostfixOperatorMemberAccess(element);
                 setHighlighting(element.getLastChild(), holder, SppSyntaxHighlighter.MEMBER_IDENTIFIER);
             }
+
+            @Override
+            public void visitFunctionCallNamedArgumentIdentifier(@NotNull SppFunctionCallNamedArgumentIdentifier element) {
+                super.visitFunctionCallNamedArgumentIdentifier(element);
+                setHighlighting(element, holder, SppSyntaxHighlighter.FUNCTION_NAMED_ARG_IDENTIFIER);
+            }
         });
     }
 

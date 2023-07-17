@@ -87,9 +87,6 @@
         KW_USE = "use"
         KW_ENUM = "enum"
         KW_IN = "in"
-        KW_PUB = "pub"
-        KW_PROT = "prot"
-        KW_PRIV = "priv"
         KW_FN = "fn"
         KW_GN = "gn"
         KW_MUT = "mut"
@@ -178,7 +175,8 @@ FunctionCallArgumentsNormalThenNamed ::= FunctionCallNamedArguments | FunctionCa
 FunctionCallNormalArguments ::= FunctionCallNormalArgument (TK_COMMA FunctionCallArgumentsNormalThenNamed)?
 FunctionCallNamedArguments ::= FunctionCallNamedArgument (TK_COMMA FunctionCallNamedArgument)*
 FunctionCallNormalArgument ::= ParameterPassingConvention? OperatorIdentifierVariadic? NonAssignmentExpression
-FunctionCallNamedArgument ::= Identifier TK_EQUALS ParameterPassingConvention? NonAssignmentExpression
+FunctionCallNamedArgument ::= FunctionCallNamedArgumentIdentifier TK_EQUALS ParameterPassingConvention? NonAssignmentExpression
+FunctionCallNamedArgumentIdentifier ::= Identifier
 
 FunctionParameters ::= TK_PAREN_L FunctionParametersRequiredThenOptional? TK_PAREN_R
 FunctionParametersRequiredThenOptional ::= FunctionParameterVariadic | FunctionParametersOptional | FunctionParametersRequired

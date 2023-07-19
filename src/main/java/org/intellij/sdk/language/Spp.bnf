@@ -146,7 +146,7 @@ SupIdentifier ::= TypeIdentifier
 SupTypedef ::= Decorators? StatementTypedef
 SupMethodPrototype ::= FunctionPrototype
 
-EnumPrototype ::= KW_ENUM EnumIdentifier TypeGenericParameters? WhereBlock? TK_BRACE_L EnumImplementation TK_BRACE_R
+EnumPrototype ::= Decorators? KW_ENUM EnumIdentifier TypeGenericParameters? WhereBlock? TK_BRACE_L EnumImplementation TK_BRACE_R
 EnumImplementation ::= (EnumMember (TK_COMMA EnumMember)*)? TK_SEMICOLON
 EnumMember ::= EnumMemberIdentifier (TK_EQUALS NonAssignmentExpression)?
 EnumMemberIdentifier ::= Identifier
@@ -204,10 +204,10 @@ ExpressionPostfix ::= ExpressionPrimary OperatorIdentifierPostfix*
 ExpressionPrimary ::= Literal | Lambda | TypeIdentifierSingle | Identifier | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope | OperatorIdentifierVariadic
 ExpressionPlaceholder ::= TK_UNDERSCORE
 
-Lambda ::= LambdaCaptureList? LambdaParameters? TK_ARROW_FAT_R LambdaImplementation
+Lambda ::= LambdaCaptureList? LambdaParameters TK_ARROW_FAT_R LambdaImplementation
 LambdaCaptureList ::= TK_BRACKET_L LambdaCaptureItem (TK_COMMA LambdaCaptureItem)* TK_BRACKET_R
 LambdaCaptureItem ::= (Identifier TK_EQUALS)? ParameterPassingConvention? Identifier
-LambdaParameters ::= TK_PAREN_L LambdaParametersRequired TK_PAREN_R
+LambdaParameters ::= TK_PAREN_L LambdaParametersRequired? TK_PAREN_R
 LambdaParametersRequired ::= LambdaParameterRequired (TK_COMMA LambdaParametersRequired)*
 LambdaParameterRequired ::= KW_MUT? FunctionParameterIdentifier
 LambdaImplementation ::= NonAssignmentExpression

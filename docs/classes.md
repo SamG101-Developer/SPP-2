@@ -78,13 +78,13 @@ sup Foo {
 - Enable certain functions if the constraints of the generic parameters are satisfied
 
 ```s++
-sup Foo<T> {
+sup Foo[T] {
     @meta::public fn foo() -> Void {}
     @meta::public fn bar() -> Void {}
     @meta::public fn baz() -> Void {}
 }
 
-sup Foo<T: std::Default> {
+sup Foo[T: std::Default] {
     @meta::public fn def() -> Void {}
 }
 ```
@@ -114,17 +114,17 @@ sup Bar for Foo {
 - Classes can be conditionally enabled based on the type of the generic parameters
 - Enable certain classes if the constraints of the generic parameters are satisfied
 - Any type-constraints on the base class must also be on the `sup` definitions when inheriting it
-  - For example if `sup Bar<T: std::Default>` was the `sup` definition for `Bar`:
-  - Then to inherit it as below, it would have to be `sup Bar<T: std::Default & std::Copy> for Foo`
+  - For example if `sup[T: Default] Bar[T]` was the `sup` definition for `Bar`:
+  - Then to inherit it as below, it would have to be `sup[T: Default & Copy] Bar[T] for Foo`
 
 ```s++
-sup Bar<T> {
+sup Bar[T] {
     @meta::virtual @meta::public fn foo(self: &Self) -> Void {}
     @meta::virtual @meta::public fn bar(self: &Self) -> Void {}
     @meta::virtual @meta::public fn baz(self: &Self) -> Void {}
 }
 
-sup Bar<T: std::Copy> for Foo {
+sup Bar[T: Copy] for Foo {
     @meta::public fn foo(self: &Self) -> Void {...}
     @meta::public fn bar(self: &Self) -> Void {...}
     @meta::public fn baz(self: &Self) -> Void {...}

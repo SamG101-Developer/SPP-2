@@ -104,7 +104,7 @@
 | `std::func::FunOnce`  | `__call_once__`                     | Postfix call                     |
 | `std::func::FunRef`   | `__call_ref__`                      | Postfix call                     |
 | `std::func::FunMut`   | `__call_mut__`                      | Postfix call                     |
-| `std::ops::Try<T, E>` | `__try__`                           | Postfix `?`                      |
+| `std::ops::Try[T, E]` | `__try__`                           | Postfix `?`                      |
 | `std::ops::Del`       | `__del__`                           | Destructor                       |
 | `std::ops::With`      | `__enter__`, `__exit__`             | For the `with` statement         |
 | `std::ops::Rng`       | `__next__`                          | For the range literal ie `0..10` |

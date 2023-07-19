@@ -43,53 +43,27 @@ public class SppColorSettingsPage implements ColorSettingsPage {
     @Override
     public @NonNls @NotNull String getDemoText() {
         return """
-                pub mod a::c::c
+                @meta::public
+                mod src::my_project::folder1::folder2::file1;
                 
-                use a::d::c;
-                use a::d::{f, g, h};
-                use a::c::f::*;
+                use std::num::Num;
+                use std::str::{Str, ToStr};
                 
-                pub cls class_1 {
-                    a: std::Num;
-                    b: std::Vec<str::Num>;
+                use src::my_project::folder1::folder2::file2::my_function as func;
+                use src::my_project::folder1::folder2::file3::{my_function, my_function2};
+                use src::my_project::folder1::folder2::file4::*
+                
+                @meta::public
+                cls MyClass {
+                    @meta::private a: std::Num;
+                    @meta::private b: std::Num;
                 }
                 
-                sup class_1 {
-                    pub fn function_1<T, U=T, ...V>(a: T, f: std::Vec<U>, ...other: V) -> std::Str {
-                        let a = 1;
-                        let b, c = (1, 2);
-                        
-                        let x = if a > 100 {
-                            let v = do_something();
-                            v + a;
-                        } elif b = some_val(), a < b.attr {
-                            let v = b.other_attr / y;
-                            v * 100;
-                        } else {
-                            x;
-                        };
-                        
-                        let y = match x {
-                            1 => 2,
-                            2 => 3,
-                            _ => 4,
-                        };
-                        
-                        let z = while some_condition() as 'outer_loop {
-                            while some_other_condition() as 'inner_loop {
-                                if some_condition() {
-                                    break 'outer_loop;
-                                } elif some_other_condition() {
-                                    break 'inner_loop;
-                                } else {
-                                    continue 'inner_loop;
-                                }
-                            }
-                        };
-                    }
+                @meta::public
+                fn my_function<T: ToStr, U: ToStr>(a: T, b: U) -> std::Str {
+                    return a.to_str() + b.to_str();
                 }
-                    
-                """;
+               """;
 
     }
 

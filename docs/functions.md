@@ -9,10 +9,6 @@
 - Functions can have a [value guard]()
 - Functions have a body
 
-### Calling convention
-- Currently either nothing is specified, or `async`
-- Functions marked `async` must return a `std::Promise<T>` type
-
 ### Generic parameters & constraints
 - Functions can have generic parameters, defined after the function name
 - Generic types must not shadow enclosing an enclosing class's generic type names
@@ -37,9 +33,9 @@
 #### Variadic parameters
 - There can be a single variadic parameter, which must be the last parameter.
 - It can either have a variadic type (all types can be different), or a single type that all the arguments must be.
-- Fix all parameters to `std::Num` types: `<T>(...args: std::Num)`.
-- Fix all parameters to the same `T` generic type: `<T>(...args: T)`.
-- Allow all parameters to be different generic types: `<...Ts>(...args: Ts)`.
+- Fix all parameters to `std::Num` types: `func[T](...args: std::Num)`.
+- Fix all parameters to the same `T` generic type: `func[T](...args: T)`.
+- Allow all parameters to be different generic types: `func[...Ts](...args: Ts)`.
 - Effectively the same as Python's `*args`, just replace `*` with `...`.
 
 #### Parameter passing conventions
@@ -61,7 +57,7 @@
 
 #### Example of converting into constrained generics:
 - `fn foo(a: std::Num, b: std::Num) -> std::Num {}`.
-- `fn foo<T, U>(a: T, b: U) -> std::Num where [T: std::Num, U: std::Num] {}`.
+- `fn foo[T, U](a: T, b: U) -> std::Num where [T: std::Num, U: std::Num] {}`.
 - Using generics allows multiple constraints to be specified on a single type.
 
 ### Value guard
@@ -74,7 +70,7 @@
 
 #### Example:
 ```s++
-fn foo<T: std::ops::Gt<RHS=U>, U>(a: T, b: U) -> std::Num if a > b {}
+fn foo[<T: std::ops::Gt[RHS=U], U>](a: T, b: U) -> std::Num if a > b {}
 ```
 
 ## Function types
@@ -127,7 +123,7 @@ fun main():
 ### Variadic function call
 Take the following function:
 ```s++
-function func_variadic_helper_0<T>(...a: T) -> std::void:
+function func_variadic_helper_0[T](...a: T) -> std::void:
     ...
 ```
 
@@ -183,7 +179,7 @@ fun my_method(self: &self_t, a: std::Number) -> std::Number:
 - For a normal class, the decorator will return the instance of the class it received
 ```s++
 @meta::public
-fun decorator1<T>(class: T, a: std::Number) -> T:
+fun decorator1[T](class: T, a: std::Number) -> T:
     class.attr = a;
     std::io::println("decorator1 called");
     return class;

@@ -31,7 +31,7 @@
 #### Upcasting
 - Compile time check to make sure that the target class is a base class of the variable type.
 - Always yields a valid object => return type is `T`.
-- Use `std::up_cast[T](...)` to upcast a variable: `let a = std::upcast<T>(b)`
+- Use `std::up_cast[T](...)` to upcast a variable: `let a = std::upcast[T](b)`
 
 #### Downcasting
 - Compile time check to make sure that the target class is a derived class of the variable type.

@@ -10,7 +10,7 @@
 ### Generic definitions
 #### Classes
 ```s++
-cls Vector<T>:
+cls Vector[T]:
     ...
 ```
 - The generic `T` is accessible to the entire class
@@ -33,8 +33,9 @@ fun test_fun<U>(a: U):
 
 #### Class methods
 ```s++
-sup<T> Vector<T>:
-    public function emplace_back(self: &mut Self, value: T):
+sup[T] Vector[T]:
+    @meta::public
+    function emplace_back(self: &mut Self, value: T):
         ...
 ```
 - The generic `T` is accessible to the method from the class
@@ -44,7 +45,7 @@ sup<T> Vector<T>:
 
 #### Sup definitions - see [super-imposing]()
 ```s++
-sup<T> Vector<T>:
+sup[T] Vector[T]:
     ...
 ```
 - Allows for super-imposing a class with a generic type
@@ -54,7 +55,7 @@ sup<T> Vector<T>:
 
 #### Enum definitions
 ```s++
-enum Foo<T>:
+enum Foo[T]:
     ...
 ```
 
@@ -67,10 +68,10 @@ enum Foo<T>:
 3. Otherwise, the generic type must be explicitly defined
 
 ```s++
-cls Wrapper<T>:
+cls Wrapper[T]:
     value: T;
     
-sup<T> Wrapper<T>:
+sup[T] Wrapper[T]:
     @std::static_method
     pub fun new(value: T):
         let w = Wrapper{value: value};
@@ -88,7 +89,7 @@ fun main():
 2. Otherwise, the generic type must be explicitly defined
 
 ```s++
-fun test_fun<T>(a: T):
+fun test_fun[T](a: T):
     ...
 
 fun main():
@@ -110,12 +111,12 @@ fun main():
 - Optional generic types can be assigned in any order
 
 ```s++
-cls Foo<T=std::Number, U=std::String>:
+cls Foo[T=std::Number, U=std::String]:
     a: T;
     b: U;
     
 fun main():
-    let f = Foo<U=std::Number>{...};
+    let f = Foo[U=std::Number]{...};
 ```
 - (In this case inference would be used to determine the type of `T` and `U`)
 
@@ -146,11 +147,11 @@ sup Foo:
 - List constraints after the generic type, separated by a `+` symbol
 - Constraints are checked at compile time
 ```s++
-cls Wrapper<T: std::fmt::Display & std::ops::Add & std::ops::Sub> {
+cls Wrapper[T: std::fmt::Display & std::ops::Add & std::ops::Sub] {
     value: T;
 }
     
-sup <T: std::fmt::Display & std::ops::Add & std::ops::Sub> Wrapper<T> {
+sup [T: std::fmt::Display & std::ops::Add & std::ops::Sub] Wrapper[T] {
     @std::static_method
     pub fun new(value: T):
         let w = Wrapper{value: value};
@@ -160,8 +161,8 @@ sup <T: std::fmt::Display & std::ops::Add & std::ops::Sub> Wrapper<T> {
 <BR>
 
 #### Constraints on optional and variadic generics work in the same way
-- Optional generics: `cls Foo<T:std::Number & std::Display = my::FormattableNumber>`
-- Variadic generics: `cls Foo<...Ts: std::Number & std::Display>` => all types in the variadic must implement the constraints
+- Optional generics: `cls Foo[T:std::Number & std::Display = my::FormattableNumber]`
+- Variadic generics: `cls Foo[...Ts: std::Number & std::Display]` => all types in the variadic must implement the constraints
 
 <BR>
 
@@ -171,7 +172,7 @@ sup <T: std::fmt::Display & std::ops::Add & std::ops::Sub> Wrapper<T> {
 - Allows nested types on a generic to be constrained (provided the generic type is constrained such that the nested type exists)
 
 ```s++
-cls Wrapper<T, U> where [
+cls Wrapper[T, U] where [
         T: std::vector,
         T::ValueType, U: std::fmt::Display {
     value: T;
@@ -187,18 +188,18 @@ cls Wrapper<T, U> where [
 - For example, if a generic implements the `std::Default`, then more method that utilize the `std::Default` can be used.
 
 ```s++
-cls Wrapper<T: std::Display> {
+cls Wrapper[T: std::Display] {
     value: T;
 }
     
-sup<T: std::Display> Wrapper<T> {
+sup[T: std::Display] Wrapper[T] {
     @std::static_method
     pub fun new(value: T) {
         let w = Wrapper{value: value};
     }
 }
 
-sup<T: std::Display & std::Default> Wrapper<T> {    
+sup[T: std::Display & std::Default] Wrapper[T] {    
     pub fun new_default() {
         return Wrapper{value: T::__def__()};
     }

@@ -5,7 +5,7 @@
 
 ### Generators
 #### Overview
-- Generators are "full" -> stateful and first-class
+- Generators are "full" -> stackless and first-class
 - Asymmetric -> one coroutine controls the other => semi-coroutines
 - Generator `gn` functions must return a type that super-imposes `std::Gen[T]`
 

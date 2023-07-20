@@ -1,86 +1,8 @@
 # Control Flow
 ## Selection
-### The `if` Statement
-#### Structure
-- The `if` statement is used to conditionally execute a block of code
-- The `if` statement is followed by a condition
-- The condition must evaluate to a boolean expression
-- The condition is followed by a block of code
-- Inline variable definitions can precede the condition
-- The block of code is executed if the condition evaluates to `true`
-- The block of code is optional -- ie can be `{}`
-
-#### Example:
-```s++
-if let x = f(), let y = g(), x.a > y.b {
-    do_something(x, y);
-}
-```
-
-### The `elif` Statement
-#### Structure
-- Same as `if`, just replace `if` with `elif`
-- Must follow an `if` statement
-- Can be any number of `elif` statements
-
-#### Example:
-```s++
-if x < y {
-    do_something(x, y);
-} elif x > y {
-    do_something_else(x, y);
-} elif x < y / 2 {
-    do_something_else_again(x, y);
-}
-```
-
-### The `else` Statement
-#### Structure
-- The `else` statement is used to execute a block of code if no other conditions are met
-- The `else` statement must follow an `if` or `elif` statement
-- The `else` statement is followed by a block of code
-- The block of code is executed if no other conditions are met
-- The block of code is optional -- ie can be `{}`
-- There can only be one `else` statement
-- The `else` statement must be the last statement in the selection
-- The `else` statement is optional
-
-#### Example:
-```s++
-if x < y {
-    do_something(x, y);
-} elif x > y {
-    do_something_else(x, y);
-} else {
-    do_something_else_again(x, y);
-}
-```
-
-### Assignment from an `if` statement
-#### Structure
-- If an `if` statement is going to be used to assign a value (known by a preceding `let`), then some conditions must be met
-- Each branch must have a final condition, whose types are all the same
-- There must be an `else` statement (and multiple optional `elif` statements)
-
-#### Example:
-```s++
-let x = if y < z {
-    1;
-} elif y > z {
-    2;
-} else {
-    3;
-};
-```
-
-#### Notes
-- Because the `IfStatement` is a `PrimaryExpression`, it final `}` can be followed by further postfix expressions, 
-such as `.foo` or `()`, allowing chaining.
-
-
-### The `match` Statement
-- See [Pattern Matching]()
-
+### Unified condition expression
+- Combines the `if` and `match` statements into a unified conditional.
+- See the [pattern matching section](pattern-matching.md) for more information.
 
 ## Iteration
 ### The `while` Statement

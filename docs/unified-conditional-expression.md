@@ -100,3 +100,13 @@ if p {
 
 ### Composing multiple patterns
 - All patterns have a precedence, and can be combined into advanced patterns.
+
+
+## Replacing simple `if` statements
+- Elegant way to replace if-else:
+```s++
+if condition == {
+    true => { ... }
+    else => { ... }
+};
+```

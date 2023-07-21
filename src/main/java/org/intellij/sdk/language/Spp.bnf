@@ -12,11 +12,10 @@
     tokenTypeClass = "org.intellij.sdk.language.psi.SppTokenType"
 
     tokens = [
-        TK_DBL_AMPERSAND = "&&"
-        TK_DBL_AMPERSAND_EQUALS = "&&="
-        TK_DBL_PIPE = "||"
-        TK_DBL_PIPE_EQUALS = "||="
-        TK_EXCLAMATION = "!"
+        TK_DOUBLE_AMPERSAND = "&&"
+        TK_DOUBLE_AMPERSAND_EQUALS = "&&="
+        TK_DOUBLE_PIPE = "||"
+        TK_DOUBLE_PIPE_EQUALS = "||="
 
         TK_AMPERSAND = "&"
         TK_AMPERSAND_EQUALS = "&="
@@ -25,48 +24,49 @@
         TK_CARET = "^"
         TK_CARET_EQUALS = "^="
 
-        TK_DBL_EQUALS = "=="
-        TK_EXCLAMATION_EQUALS = "!="
-        TK_ANGLE_L = "<"
-        TK_ANGLE_L_EQUALS = "<="
-        TK_ANGLE_R = ">"
-        TK_ANGLE_R_EQUALS = ">="
-        TK_ARROW_FAT_DBL = "<=>"
+        TK_EQ = "=="
+        TK_NE = "!="
+        TK_LT = "<"
+        TK_LE = "<="
+        TK_GT = ">"
+        TK_GE = ">="
+        TK_SS = "<=>"
 
-        TK_PLUS = "+"
-        TK_PLUS_EQUALS = "+="
-        TK_HYPHEN = "-"
-        TK_HYPHEN_EQUALS = "-="
-        TK_ASTERISK = "*"
-        TK_ASTERISK_EQUALS = "*="
-        TK_FORWARD_SLASH = "/"
-        TK_FORWARD_SLASH_EQUALS = "/="
-        TK_PERCENT = "%"
-        TK_PERCENT_EQUALS = "%="
+        TK_ADD = "+"
+        TK_ADD_EQ = "+="
+        TK_SUB = "-"
+        TK_SUB_EQ = "-="
+        TK_MUL = "*"
+        TK_MUL_EQ = "*="
+        TK_DIV = "/"
+        TK_DIV_EQ = "/="
+        TK_REM = "%"
+        TK_REM_EQ = "%="
 
         TK_PAREN_L = "("
         TK_PAREN_R = ")"
-        TK_BRACKET_L = "["
-        TK_BRACKET_R = "]"
+        TK_BRACK_L = "["
+        TK_BRACK_R = "]"
         TK_BRACE_L = "{"
         TK_BRACE_R = "}"
 
-        TK_QUESTION = "?"
+        TK_QST = "?"
 
-        TK_PIPE_ARROW_L = "<|"
         TK_PIPE_ARROW_R = "|>"
-        TK_DBL_DOT = ".."
-        TK_TRIP_DOT = "..."
+        TK_PIPE_ARROW_L = "<|"
+        TK_DOUBLE_DOT = ".."
+        TK_TRIPLE_DOT = "..."
         TK_COLON = ":"
 
-        TK_DOT = "."
-        TK_DBL_COLON = "::"
+        TK_DYNA_RES = "."
+        TK_STAT_RES = "::"
         TK_COMMA = ","
-        TK_EQUALS = "="
-        TK_ARROW_R = "->"
-        TK_ARROW_FAT_R = "=>"
+        TK_EQUAL = "="
+        TK_ARROW_RETURN = "->"
+        TK_ARROW_R_FAT = "=>"
         TK_AT = "@"
         TK_UNDERSCORE = "_"
+
         TK_SEMICOLON = ";"
 
         KW_MOD = "mod"
@@ -78,12 +78,10 @@
         KW_MUT = "mut"
         KW_LET = "let"
         KW_IF = "if"
-        KW_ELIF = "elif"
         KW_ELSE = "else"
         KW_WHILE = "while"
         KW_FOR = "for"
         KW_DO = "do"
-        KW_MATCH = "match"
         KW_RET = "ret"
         KW_YIELD = "yield"
         KW_CLS = "cls"
@@ -104,7 +102,7 @@
         LX_BIN_DIGITS = "regexp:(0b[01]+)"
         LX_HEX_DIGITS = "regexp:(0x[0-9a-fA-F]+)"
         LX_DEC_DIGITS = "regexp:([0-9]+)"
-        LX_DBL_QUOTE_STR = "regexp:(\".*\")"
+        LX_DOUBLE_QUOTE_STR = "regexp:(\".*\")"
         LX_SNG_QUOTE_CHR = "regexp:('.?')"
         LX_REGEX = "regexp:(r\".*\")"
         LX_TAG = "regexp:('[a-zA-Z0-9_]+)"
@@ -113,158 +111,192 @@
 
 
 Program ::= ModulePrototype <<eof>>
-
 ModulePrototype ::= Decorators? KW_MOD ModuleIdentifier TK_SEMICOLON ModuleImplementation
 ModuleImplementation ::= ImportBlock? ModuleMember*
-ModuleIdentifier ::= Identifier (TK_DBL_COLON Identifier)*
-ModuleMember ::= FunctionPrototype | EnumPrototype | ClassPrototype | SupPrototype
+ModuleIdentifier ::= Identifier ModuleIdentifierNextPart*
+ModuleIdentifierNextPart ::= TK_STAT_RES Identifier
+ModuleMember ::= (FunctionPrototype | EnumPrototype | ClassPrototype | SupPrototype)
 
 ImportBlock ::= ImportStatement+
 ImportStatement ::= KW_USE ImportIdentifier ImportWhat TK_SEMICOLON
-ImportIdentifier ::= (Identifier TK_DBL_COLON)+
-ImportWhat ::= ImportAll | ImportSome | ImportOne
-ImportAll ::= TK_ASTERISK
-ImportSome ::= TK_BRACE_L ImportType (TK_COMMA ImportType)+ TK_BRACE_R
-ImportOne ::= ImportType
-ImportType ::= Identifier ImportAlias?
-ImportAlias ::= TK_AS Identifier
+ImportIdentifier ::= ImportIdentifierPart+
+ImportIdentifierPart ::= Identifier TK_STAT_RES
+ImportWhat ::= (ImportAll | ImportSingle | ImportMultiple)
+ImportAll ::= TK_MUL
+ImportSingle ::= ImportType
+ImportMultiple ::= TK_BRACE_L ImportTypes TK_BRACE_R
+ImportTypes ::= ImportType ImportTypesNext*
+ImportTypesNext ::= TK_COMMA ImportType
+ImportType ::= Identifier ImportTypeAlias?
+ImportTypeAlias ::= KW_AS Identifier
 
-ClassPrototype ::= Decorators? KW_CLS ClassIdentifier TypeGenericParameters? ClassMetaclass? WhereBlock? TK_BRACE_L ClassImplementation TK_BRACE_R
-ClassMetaclass ::= KW_WITH TypeIdentifier
+ClassPrototype ::= Decorators? KW_CLS ClassIdentifier TypeGenericParameters? WhereBlock? TK_BRACE_L ClassImplementation TK_BRACE_R
 ClassImplementation ::= ClassMember*
 ClassMember ::= ClassAttribute
 ClassAttribute ::= Decorators? KW_MUT? ClassAttributeIdentifier TK_COLON TypeIdentifier TK_SEMICOLON
-ClassIdentifier ::= Identifier
 ClassAttributeIdentifier ::= Identifier
+ClassIdentifier ::= Identifier
 
 SupPrototype ::= KW_SUP (SupPrototypeWithInherit | SupPrototypeNormal)
 SupPrototypeNormal ::= TypeGenericParameters? SupIdentifier WhereBlock? TK_BRACE_L SupImplementation TK_BRACE_R
 SupPrototypeWithInherit ::= TypeGenericParameters? SupIdentifier KW_FOR SupIdentifier WhereBlock? TK_BRACE_L SupImplementation TK_BRACE_R
 SupImplementation ::= SupMember*
-SupMember ::= SupMethodPrototype | SupTypedef
-SupIdentifier ::= TypeIdentifier
+SupMember ::= (SupMethodPrototype | SupTypedef)
+SupIdentifier ::= SingleTypeIdentifierNoSelf
 SupTypedef ::= Decorators? StatementTypedef
 SupMethodPrototype ::= FunctionPrototype
 
 EnumPrototype ::= Decorators? KW_ENUM EnumIdentifier TypeGenericParameters? WhereBlock? TK_BRACE_L EnumImplementation TK_BRACE_R
-EnumImplementation ::= (EnumMember (TK_COMMA EnumMember)*)? TK_SEMICOLON
-EnumMember ::= EnumMemberIdentifier (TK_EQUALS NonAssignmentExpression)?
+EnumImplementation ::= EnumMember EnumMemberNext* TK_SEMICOLON
+EnumMemberNext ::= TK_COMMA EnumMember
+EnumMember ::= EnumMemberIdentifier EnumMemberValueWrapper?
+EnumMemberValueWrapper ::= TK_EQUAL NonAssignmentExpression
 EnumMemberIdentifier ::= Identifier
 EnumIdentifier ::= Identifier
 
-FunctionPrototype ::= Decorators? (KW_FN | KW_GN) FunctionIdentifier TypeGenericParameters? FunctionParameters TK_ARROW_R TypeIdentifiers WhereBlock? ValueGuard? TK_BRACE_L FunctionImplementation TK_BRACE_R
+FunctionStructureType ::= (KW_FN | KW_GN)
+FunctionPrototype ::= Decorators? FunctionStructureType FunctionIdentifier TypeGenericParameters? FunctionParameters TK_ARROW_RETURN TypeIdentifier WhereBlock? ValueGuard? TK_BRACE_L FunctionImplementation TK_BRACE_R
 FunctionImplementation ::= Statement*
 FunctionIdentifier ::= Identifier
 
 FunctionCallArguments ::= TK_PAREN_L FunctionCallArgumentsNormalThenNamed? TK_PAREN_R
-FunctionCallArgumentsNormalThenNamed ::= FunctionCallNamedArguments | FunctionCallNormalArguments
-FunctionCallNormalArguments ::= FunctionCallNormalArgument (TK_COMMA FunctionCallArgumentsNormalThenNamed)?
-FunctionCallNamedArguments ::= FunctionCallNamedArgument (TK_COMMA FunctionCallNamedArgument)*
+FunctionCallArgumentsNormalThenNamed ::= (FunctionCallNamedArguments | FunctionCallNormalArguments)
+FunctionCallNormalArguments ::= FunctionCallNormalArgument FunctionCallRestOfNormalArguments?
+FunctionCallRestOfNormalArguments ::= TK_COMMA FunctionCallArgumentsNormalThenNamed
+FunctionCallNamedArguments ::= FunctionCallNamedArgument FunctionCallNextNamedArgument*
+FunctionCallNextNamedArgument ::= TK_COMMA FunctionCallNamedArgument
 FunctionCallNormalArgument ::= ParameterPassingConvention? OperatorIdentifierVariadic? NonAssignmentExpression
-FunctionCallNamedArgument ::= FunctionCallNamedArgumentIdentifier TK_EQUALS ParameterPassingConvention? NonAssignmentExpression
+FunctionCallNamedArgument ::= FunctionCallNamedArgumentIdentifier TK_EQUAL ParameterPassingConvention? NonAssignmentExpression
 FunctionCallNamedArgumentIdentifier ::= Identifier
 
 FunctionParameters ::= TK_PAREN_L FunctionParametersRequiredThenOptional? TK_PAREN_R
-FunctionParametersRequiredThenOptional ::= FunctionParameterVariadic | FunctionParametersOptional | FunctionParametersRequired
-FunctionParametersOptionalThenVariadic ::= FunctionParameterVariadic | FunctionParametersOptional
-FunctionParametersRequired ::= FunctionParameterRequired (TK_COMMA FunctionParametersRequiredThenOptional)?
-FunctionParametersOptional ::= FunctionParameterOptional (TK_COMMA FunctionParametersOptionalThenVariadic)?
-FunctionParameterRequired ::= KW_MUT? FunctionParameterIdentifier TK_COLON ParameterPassingConvention? TypeIdentifier
-FunctionParameterOptional ::= FunctionParameterRequired TK_EQUALS NonAssignmentExpression
-FunctionParameterVariadic ::= OperatorIdentifierVariadic FunctionParameterRequired
+FunctionParametersRequiredThenOptional ::= (FunctionVariadicParameters | FunctionOptionalParameters | FunctionRequiredParameters)
+FunctionParametersOptionalThenVariadic ::= (FunctionVariadicParameters | FunctionOptionalParameters)
+FunctionRequiredParameters ::= FunctionRequiredParameter FunctionRestOfRequiredParameters?
+FunctionRestOfRequiredParameters ::= TK_COMMA FunctionParametersRequiredThenOptional
+FunctionOptionalParameters ::= FunctionOptionalParameter FunctionRestOfOptionalParameters?
+FunctionRestOfOptionalParameters ::= TK_COMMA FunctionParametersOptionalThenVariadic
+FunctionVariadicParameters ::= FunctionVariadicParameter
+FunctionRequiredParameter ::= KW_MUT? FunctionParameterIdentifier TK_COLON ParameterPassingConvention? TypeIdentifier
+FunctionOptionalParameter ::= FunctionRequiredParameter TK_EQUAL NonAssignmentExpression
+FunctionVariadicParameter ::= OperatorIdentifierVariadic FunctionRequiredParameter
 FunctionParameterIdentifier ::= Identifier
 
-WhereBlock ::= KW_WHERE TK_BRACKET_L WhereConstraintChain TK_BRACKET_R
-WhereConstraintChain ::= WhereConstraint (TK_COMMA WhereConstraintChain)*
-WhereConstraint ::= TypeIdentifiers TK_COLON WhereConstraintConstraints
-WhereConstraintConstraints ::= TypeIdentifier (TK_AMPERSAND TypeIdentifier)*
+WhereBlock ::= KW_WHERE TK_BRACK_L WhereConstraints TK_BRACK_R
+WhereConstraints ::= WhereConstraint WhereConstraintNext*
+WhereConstraintNext ::= TK_COMMA WhereConstraint
+WhereConstraint ::= TypeIdentifiers TK_COLON WhereConstraintChain
+WhereConstraintChain ::= WhereConstraintChainElement WhereConstraintChainElementNext*
+WhereConstraintChainElementNext ::= TK_AMPERSAND WhereConstraintChainElement
+WhereConstraintChainElement ::= SingleTypeIdentifier
 ValueGuard ::= KW_IF NonAssignmentExpression
 
 Decorator ::= TK_AT DecoratorIdentifier TypeGenericArguments? FunctionCallArguments?
-Decorators ::= Decorator+
-DecoratorIdentifier ::= TypeIdentifier  //?
+Decorators ::= Decorator*
+DecoratorIdentifier ::= ModuleIdentifier
 
-Expressions ::= Expression (TK_COMMA Expression)*
-Expression ::= ExpressionAssignment
-NonAssignmentExpression ::= ExpressionLogicalOr
-ExpressionAssignment ::= ExpressionAssignmentMultiple | ExpressionAssignmentSingle
-ExpressionAssignmentSingle ::= NonAssignmentExpression (OperatorIdentifierAssignment NonAssignmentExpression)?
-ExpressionAssignmentMultiple ::= NonAssignmentExpression (TK_COMMA NonAssignmentExpression)* TK_EQUALS NonAssignmentExpression
-ExpressionLogicalOr ::= ExpressionLogicalAnd (TK_DBL_PIPE ExpressionLogicalOr)?
-ExpressionLogicalAnd ::= ExpressionBitwiseOr (TK_DBL_AMPERSAND ExpressionLogicalAnd)?
-ExpressionBitwiseOr ::= ExpressionBitwiseXor (TK_PIPE ExpressionBitwiseOr)?
-ExpressionBitwiseXor ::= ExpressionBitwiseAnd (TK_CARET ExpressionBitwiseXor)?
-ExpressionBitwiseAnd ::= ExpressionEquality (TK_AMPERSAND ExpressionBitwiseAnd)?
-ExpressionEquality ::= ExpressionRelational (OperatorIdentifierEquality ExpressionEquality)?
-ExpressionRelational ::= ExpressionAdditive (OperatorIdentifierRelational ExpressionRelational)?
-ExpressionAdditive ::= ExpressionMultiplicative (OperatorIdentifierAdditive ExpressionAdditive)?
-ExpressionMultiplicative ::= ExpressionPipe (OperatorIdentifierMultiplicative ExpressionMultiplicative)?
-ExpressionPipe ::= ExpressionPostfix (OperatorIdentifierPipe ExpressionPipe)?
-ExpressionPostfix ::= ExpressionPrimary OperatorIdentifierPostfix*
-ExpressionPrimary ::= Literal | Lambda | TypeIdentifierSingle | Identifier | ExpressionPlaceholder | StatementIf | StatementMatch | StatementWhile | StatementFor | StatementDo | StatementNewScope | OperatorIdentifierVariadic
+Expressions ::= Expression ExpressionNext*
+ExpressionNext ::= TK_COMMA Expression
+Expression ::= AssignmentExpression
+
+NonAssignmentExpression ::= LogicalOrExpression
+AssignmentExpression ::= (AssignmentExpressionMultiple | AssignmentExpressionSingle)
+AssignmentExpressionSingle ::= NonAssignmentExpression (OperatorIdentifierAssignment NonAssignmentExpression)?
+AssignmentExpressionMultiple ::= NonAssignmentExpression AssignmentMultipleLhs* TK_EQUAL NonAssignmentExpression
+AssignmentMultipleLhs ::= TK_COMMA NonAssignmentExpression
+LogicalOrExpression ::= LogicalAndExpression (TK_DOUBLE_PIPE LogicalOrExpression)?
+LogicalAndExpression ::= BitwiseOrExpression (TK_DOUBLE_AMP LogicalAndExpression)?
+BitwiseOrExpression ::= BitwiseXorExpression (TK_PIPE BitwiseOrExpression)?
+BitwiseXorExpression ::= BitwiseAndExpression (TK_CARET BitwiseXorExpression)?
+BitwiseAndExpression ::= EqualityExpression (TK_AMP BitwiseAndExpression)?
+EqualityExpression ::= RelationalExpression (OperatorIdentifierEquality RelationalExpression)?
+RelationalExpression ::= AdditiveExpression (OperatorIdentifierRelation RelationalExpression)?
+AdditiveExpression ::= MultiplicativeExpression (OperatorIdentifierAdditive AdditiveExpression)?
+MultiplicativeExpression ::= PipeExpression (OperatorIdentifierMultiplicative MultiplicativeExpression)?
+PipeExpression ::= PostfixExpression (OperatorIdentifierPipe PipeExpression)?
+PostfixExpression ::= PrimaryExpression OperatorIdentifierPostfix*
+
+PrimaryExpression ::= (StatementIf | StatementWhile | StatementFor | StatementDo | StatementNewScope | StatementYield | StatementWith | PrimaryTypeIdentifier | PrimaryGenericIdentifierForFuncCall | Lambda | Identifier | Literal | OperatorIdentifierVariadic | ExpressionPlaceholder)
+PrimaryGenericIdentifierForFuncCall ::= GenericIdentifier PostfixOperatorFunctionCall
+PrimaryTypeIdentifier ::= SingleTypeIdentifier PostfixOperatorStructInitializer
 ExpressionPlaceholder ::= TK_UNDERSCORE
 
-Lambda ::= LambdaCaptureList? LambdaParameters TK_ARROW_FAT_R LambdaImplementation
-LambdaCaptureList ::= TK_BRACKET_L LambdaCaptureItem (TK_COMMA LambdaCaptureItem)* TK_BRACKET_R
-LambdaCaptureItem ::= (Identifier TK_EQUALS)? ParameterPassingConvention? Identifier
+Lambda ::= LambdaCaptureList? LambdaParameters TK_ARROW_R_FAT LambdaImplementation
+LambdaCaptureList ::= TK_BRACK_L LambdaCaptureItem LambdaCaptureItemNext* TK_BRACK_R
+LambdaCaptureItemNext ::= TK_COMMA LambdaCaptureItem
+LambdaCaptureItem ::= LambdaCaptureItemAlias? ParameterPassingConvention? Identifier
+LambdaCaptureItemAlias ::= Identifier TK_EQUAL
 LambdaParameters ::= TK_PAREN_L LambdaParametersRequired? TK_PAREN_R
-LambdaParametersRequired ::= LambdaParameterRequired (TK_COMMA LambdaParametersRequired)*
+LambdaParametersRequired ::= LambdaParameterRequired LambdaParameterRequiredNext*
+LambdaParameterRequiredNext ::= TK_COMMA LambdaParameterRequired
 LambdaParameterRequired ::= KW_MUT? FunctionParameterIdentifier
 LambdaImplementation ::= NonAssignmentExpression
 
-TypeIdentifier ::= TypeIdentifierSingle | TypeIdentifierTuple
-TypeIdentifierSingle ::= ((KW_SELF TK_DBL_COLON)? GenericIdentifier (TK_DBL_COLON (GenericIdentifier | Number))*) | KW_SELF
-TypeIdentifierTuple ::= TK_PAREN_L TypeIdentifiers? TK_PAREN_R
-TypeIdentifiers ::= TypeIdentifier (TK_COMMA TypeIdentifier)*
+SingleTypeIdentifierWithSelf ::= KW_SELF TypeRawIdentifierNext*
+SingleTypeIdentifierNoSelf ::= GenericIdentifier TypeRawIdentifierNext*
+TypeRawIdentifierNext ::= TK_STAT_RES TypeRawIdentifier
+TypeRawIdentifier ::= (GenericIdentifier | TypeIntegerIdentifier)
+TypeIntegerIdentifier ::= NumericInteger
+TypeIdentifier ::= SingleTypeIdentifier | TupleTypeIdentifiers
+SingleTypeIdentifier ::= SingleTypeIdentifierWithSelf | SingleTypeIdentifierNoSelf
+TupleTypeIdentifiers ::= TK_PAREN_L TypeIdentifiers? TK_PAREN_R
+TypeIdentifiers ::= TypeIdentifier TypeIdentifierNext*
+TypeIdentifierNext ::= TK_COMMA TypeIdentifier
 
-TypeGenericArguments ::= TK_BRACKET_L TypeGenericArgumentsNormalThenNamed? TK_BRACKET_R
-TypeGenericArgumentsNormalThenNamed ::= TypeGenericArgumentsNamed | TypeGenericArgumentsNormal
-TypeGenericArgumentsNormal ::= TypeGenericArgumentNormal (TK_COMMA TypeGenericArgumentsNormalThenNamed)?
-TypeGenericArgumentsNamed ::= TypeGenericArgumentNamed (TK_COMMA TypeGenericArgumentNamed)*
-TypeGenericArgumentNormal ::= TypeIdentifier
-TypeGenericArgumentNamed ::= Identifier TK_EQUALS TypeIdentifier
+TypeGenericArguments ::= TK_BRACK_L TypeGenericArgumentsNormalThenNamed? TK_BRACK_R
+TypeGenericArgumentsNormalThenNamed ::= (TypeGenericNamedArguments | TypeGenericNormalArguments)
+TypeGenericNormalArguments ::= TypeGenericNormalArgument TypeGenericRestOfNormalArguments?
+TypeGenericRestOfNormalArguments ::= TK_COMMA TypeGenericArgumentsNormalThenNamed
+TypeGenericNamedArguments ::= TypeGenericNamedArgument TypeGenericNextNamedArgument*
+TypeGenericNextNamedArgument ::= TK_COMMA TypeGenericNamedArgument
+TypeGenericNormalArgument ::= TypeIdentifier
+TypeGenericNamedArgument ::= Identifier TK_EQUAL TypeIdentifier
 
-TypeGenericParameters ::= TK_BRACKET_L TypeGenericParametersRequiredThenOptional? TK_BRACKET_R
-TypeGenericParametersRequiredThenOptional ::= TypeGenericParametersVariadic | TypeGenericParametersOptional | TypeGenericParametersRequired
-TypeGenericParametersOptionalThenVariadic ::= TypeGenericParametersVariadic | TypeGenericParametersOptional
-TypeGenericParametersRequired ::= TypeGenericParameterRequired (TK_COMMA TypeGenericParametersRequiredThenOptional)?
-TypeGenericParametersOptional ::= TypeGenericParameterOptional (TK_COMMA TypeGenericParametersOptionalThenVariadic)?
-TypeGenericParametersVariadic ::= TypeGenericParameterVariadic (TK_COMMA TypeGenericParameterVariadic)*
-TypeGenericParameterRequired ::= TypeGenericParameterIdentifier TypeGenericParameterInlineConstraint?
-TypeGenericParameterOptional ::= TypeGenericParameterRequired TK_EQUALS TypeIdentifier
-TypeGenericParameterVariadic ::= OperatorIdentifierVariadic TypeGenericParameterRequired
-TypeGenericParameterInlineConstraint ::= TK_COLON WhereConstraintConstraints?
+TypeGenericParameters ::= TK_BRACK_L TypeGenericParametersRequiredThenOptional? TK_BRACK_R
+TypeGenericParametersRequiredThenOptional ::= (TypeGenericVariadicParameters | TypeGenericOptionalParameters | TypeGenericRequiredParameters)
+TypeGenericParametersOptionalThenVariadic ::= (TypeGenericVariadicParameters | TypeGenericOptionalParameters)
+TypeGenericRequiredParameters ::= TypeGenericRequiredParameter TypeGenericRestOfRequiredParameters?
+TypeGenericRestOfRequiredParameters ::= TK_COMMA TypeGenericParametersRequiredThenOptional
+TypeGenericOptionalParameters ::= TypeGenericOptionalParameter TypeGenericRestOfOptionalParameters?
+TypeGenericRestOfOptionalParameters ::= TK_COMMA TypeGenericParametersOptionalThenVariadic
+TypeGenericRequiredParameter ::= TypeGenericParameterIdentifier TypeGenericParameterInlineConstraint?
+TypeGenericOptionalParameter ::= TypeGenericRequiredParameter TK_EQUAL TypeIdentifier
+TypeGenericVariadicParameters ::= TypeGenericVariadicParameter TypeGenericRestOfVariadicParameters?
+TypeGenericVariadicParameter ::= TK_TRIPLE_DOT TypeGenericRequiredParameter
+TypeGenericRestOfVariadicParameters ::= TK_COMMA TypeGenericVariadicParameter
 TypeGenericParameterIdentifier ::= Identifier
+TypeGenericParameterInlineConstraint ::= TK_COLON WhereConstraintChain
 
-StatementInlineDefinition ::= KW_LET LocalVariableIdentifier TK_EQUALS NonAssignmentExpression TK_COMMA
-StatementIf ::= StatementIfBranch StatementElifBranch* StatementElseBranch?
-StatementIfBranch ::= KW_IF StatementInlineDefinition* Expression StatementBlock
-StatementElifBranch ::= KW_ELIF StatementInlineDefinition* Expression StatementBlock
-StatementElseBranch ::= KW_ELSE StatementBlock
-StatementWhile ::= KW_WHILE Expression StatementLoopTag? StatementBlock
-StatementFor ::= KW_FOR LocalVariableIdentifiers KW_IN Expression StatementLoopTag? StatementBlock
-StatementDo ::= KW_DO StatementLoopTag? StatementBlock KW_WHILE Expression
-StatementMatch ::= KW_MATCH Expression StatementCases
-StatementCaseExpression ::= Expression
-StatementCaseExpressions ::= StatementCaseExpression (TK_COMMA StatementCaseExpression)*
-StatementCase ::= StatementCaseExpressions ValueGuard TK_ARROW_FAT_R StatementBlock
-StatementWith ::= KW_WITH Expression (KW_AS LocalVariableIdentifier)? StatementBlock
+StatementIf ::= KW_IF NonAssignmentExpression PatternOp? TK_BRACE_L StatementPattern* StatementPatternDefault? TK_BRACE_R
+StatementPattern ::= PatternOp? PatternComposite PatternGuard? TK_ARROW_R_FAT Statement
+StatementPatternDefault ::= KW_ELSE TK_ARROW_R_FAT Statement
+PatternOp ::= (OperatorIdentifierRelation | OperatorIdentifierEquality)
+PatternGuard ::= TK_DOUBLE_AMPERSAND NonAssignmentExpression
+PatternComposite ::= PatternVal PatternValNext*
+PatternVal ::= (PrimaryTypeIdentifier | Literal)
+PatternValNext ::= TK_PIPE PatternVal
+StatementWhile ::= KW_WHILE Expression StatementLoopTag? StatementNewScope StatementsResidualAction?
+StatementFor ::= KW_FOR LocalVariableIdentifiers KW_IN Expression StatementLoopTag? StatementNewScope StatementsResidualAction?
+StatementDo ::= KW_DO KW_WHILE Expression StatementLoopTag? StatementNewScope StatementsResidualAction?
+StatementWith ::= KW_WITH Expression StatementAliasForWithExpression? StatementNewScope
+StatementAliasForWithExpression ::= KW_AS LocalVariableIdentifier
 StatementReturn ::= KW_RET Expression? TK_SEMICOLON
-StatementYield ::= KW_YIELD Expression? TK_SEMICOLON
+StatementYield ::= KW_YIELD Expression?
 StatementTypedef ::= KW_USE GenericIdentifier KW_AS TypeIdentifier TK_SEMICOLON
 StatementBreak ::= KW_BREAK StatementTagIdentifier? Expression? TK_SEMICOLON
 StatementContinue ::= KW_CONTINUE StatementTagIdentifier? TK_SEMICOLON
 StatementLoopTag ::= KW_AS StatementTagIdentifier
 StatementTagIdentifier ::= LX_TAG
-StatementBlock ::= TK_BRACE_L Statement* TK_BRACE_R
-StatementCases ::= TK_BRACE_L StatementCase* TK_BRACE_R
-StatementLet ::= KW_LET LocalVariableIdentifiers ((TK_COLON TypeIdentifier) | (TK_EQUALS NonAssignmentExpression)) TK_SEMICOLON
+StatementLet ::= (StatementLetWithValue | StatementLetWithType)  TK_SEMICOLON
+StatementLetWithValue ::= KW_LET LocalVariableIdentifiers TK_EQUAL NonAssignmentExpression StatementsResidualAction?
+StatementsResidualAction ::= KW_ELSE NonAssignmentExpression
+StatementLetWithType ::= KW_LET LocalVariableIdentifiers TK_COLON TypeIdentifier
+LocalVariableIdentifier ::= KW_MUT? Identifier
+LocalVariableIdentifiers ::= LocalVariableIdentifier LocalVariableIdentifierNext*
+LocalVariableIdentifierNext ::= TK_COMMA LocalVariableIdentifier
 StatementExpression ::= Expression TK_SEMICOLON
 StatementNewScope ::= TK_BRACE_L Statement* TK_BRACE_R
-Statement ::= StatementIf | StatementWhile | StatementFor | StatementDo | StatementMatch | StatementWith | StatementReturn | StatementYield | StatementTypedef | StatementBreak | StatementContinue | StatementLet | StatementExpression | StatementNewScope | FunctionPrototype
-
-LocalVariableIdentifier ::= KW_MUT? Identifier
-LocalVariableIdentifiers ::= LocalVariableIdentifier (TK_COMMA LocalVariableIdentifier)*
+Statement ::= StatementTypedef | StatementReturn | StatementLet | StatementBreak | StatementContinue | StatementExpression | FunctionPrototype
 
 Identifier ::= LX_IDENTIFIER
 GenericIdentifier ::= LX_IDENTIFIER TypeGenericArguments?
@@ -272,36 +304,36 @@ GenericIdentifier ::= LX_IDENTIFIER TypeGenericArguments?
 PostfixOperatorFunctionCall ::= FunctionCallArguments
 PostfixOperatorMemberAccess ::= OperatorIdentifierMemberAccess (GenericIdentifier | Number)
 PostfixOperatorStructInitializer ::= TK_BRACE_L PostfixOperatorStructInitializerFields? TK_BRACE_R
-PostfixOperatorStructInitializerFields ::= PostfixOperatorStructInitializerField (TK_COMMA PostfixOperatorStructInitializerField)*
-PostfixOperatorStructInitializerField ::= PostfixOperatorStructInitializerFieldName (TK_COLON NonAssignmentExpression)?
-PostfixOperatorStructInitializerFieldName ::= KW_SUP | KW_ELSE | Identifier
+PostfixOperatorStructInitializerFields ::= PostfixOperatorStructInitializerField PostfixOperatorStructInitializerFieldNext*
+PostfixOperatorStructInitializerFieldNext ::= TK_COMMA PostfixOperatorStructInitializerField
+PostfixOperatorStructInitializerField ::= PostfixOperatorStructInitializerFieldIdentifier PostfixOperatorStructInitializerFieldValueDifferentToIdentifier?
+PostfixOperatorStructInitializerFieldValueDifferentToIdentifier ::= TK_COLON NonAssignmentExpression
+PostfixOperatorStructInitializerFieldIdentifier ::= (KW_SUP | KW_ELSE | Identifier)
 
-OperatorIdentifierAssignment ::= TK_DBL_PIPE_EQUALS | TK_DBL_AMPERSAND_EQUALS | TK_PIPE_EQUALS | TK_AMPERSAND_EQUALS | TK_CARET_EQUALS | TK_DBL_ANGLE_L_EQUALS | TK_DBL_ANGLE_R_EQUALS | TK_TRIP_ANGLE_L_EQUALS | TK_TRIP_ANGLE_R_EQUALS | TK_PLUS_EQUALS | TK_HYPEHN_EQUALS | TK_ASTERISK_EQUALS | TK_FORWARD_SLASH_EQUALS | TK_DBL_FORWARD_SLASH_EQUALS | TK_PERCENT_EQUALS | TK_DBL_ASTERISK_EQUALS | TK_DBL_QUESTION_MARK_EQUALS
-OperatorIdentifierEquality ::= TK_DBL_EQUALS | TK_EXCLAMATION_EQUALS
-OperatorIdentifierRelational ::= TK_ANGLE_L | TK_ANGLE_R | TK_ANGLE_L_EQUALS | TK_ANGLE_R_EQUALS | TK_ARROW_FAT_DBL
-OperatorIdentifierAdditive ::= TK_PLUS | TK_HYPHEN
-OperatorIdentifierMultiplicative ::= TK_ASTERISK | TK_FORWARD_SLASH | TK_DBL_FORWARD_SLASH | TK_PERCENT
-OperatorIdentifierPipe ::= TK_PIPE_ARROW_L | TK_PIPE_ARROW_R
-OperatorIdentifierVariadic ::= TK_TRIP_DOT
-OperatorIdentifierMemberAccess ::= TK_DOT
-OperatorIdentifierPostfix ::= PostfixOperatorFunctionCall | PostfixOperatorMemberAccess | PostfixOperatorStructInitializer | TK_QUESTION
+OperatorIdentifierAssignment ::= (TK_DOUBLE_PIPE_EQUALS | TK_DOUBLE_AMPERSAND_EQUALS | TK_AMPERSAND_EQUALS | TK_PIPE_EQUALS | TK_CARET_EQUALS | TK_ADD_EQ | TK_SUB_EQ | TK_MUL_EQ | TK_DIV_EQ | TK_REM_EQ)
+OperatorIdentifierEquality ::= (TK_EQ | TK_NE)
+OperatorIdentifierRelation ::= (TK_LT | TK_GT | TK_LE | TK_GE | TK_SS)
+OperatorIdentifierAdditive ::= (TK_ADD | TK_SUB)
+OperatorIdentifierMultiplicative ::= (TK_MUL | TK_DIV | TK_REM)
+OperatorIdentifierPipe ::= (TK_PIPE_ARROW_R | TK_PIPE_ARROW_L)
 ParameterPassingConvention ::= TK_AMPERSAND KW_MUT?
+OperatorIdentifierVariadic ::= TK_TRIPLE_DOT
+OperatorIdentifierMemberAccess ::= (TK_DYNA_RES | TK_STAT_RES)
+OperatorIdentifierPostfix ::= (PostfixOperatorFunctionCall | PostfixOperatorMemberAccess | TK_QST)
 
-Literal ::= LiteralNumber | LiteralString | LiteralChar | LiteralBool | LiteralTuple | LiteralRegex // | LiteralRange
-LiteralNumber ::= LiteralNumberBase02 | LiteralNumberBase10 | LiteralNumberBase16
-LiteralString ::= LX_DBL_QUOTE_STR
-LiteralChar ::= LX_SNG_QUOTE_CHR
-LiteralBool ::= KW_TRUE | KW_FALSE
-LiteralTuple ::= TK_PAREN_L Expressions? TK_PAREN_R
+Literal ::= (LiteralNumber | LiteralString | LiteralChar | LiteralBoolean | LiteralTuple | LiteralRegex)
+LiteralNumber ::= (LiteralNumberBase02 | LiteralNumberBase16 | LiteralNumberBase10)
+LiteralString ::= LX_DOUBLE_QUOTE_STR
+LiteralChar ::= LX_SINGLE_QUOTE_CHR
+LiteralBoolean ::= (KW_TRUE | KW_FALSE)
 LiteralRegex ::= LX_REGEX
-// LiteralRange ::= Expression TK_TRIPLE_DOT Expression
-
+LiteralTuple ::= TK_PAREN_L Expressions? TK_PAREN_R
 LiteralNumberBase02 ::= LX_BIN_DIGITS
 LiteralNumberBase10 ::= Number
 LiteralNumberBase16 ::= LX_HEX_DIGITS
 
 Number ::= NumericInteger NumericDecimal? NumericComplex? NumericExponent?
 NumericInteger ::= LX_DEC_DIGITS
-NumericDecimal ::= TK_DOT LX_DEC_DIGITS
+NumericDecimal ::= TK_DYNA_RES LX_DEC_DIGITS
 NumericComplex ::= "i"
 NumericExponent ::= "e" OperatorIdentifierAdditive? NumericInteger

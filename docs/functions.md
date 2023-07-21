@@ -1,19 +1,24 @@
 # Functions
 ## Overview of functions
-- Functions can have a calling convention - `async` or nothing
-- Functions can have [decorators](), that wrap the function in extra behaviour
-- Functions can have [generic parameters & constraints]()
-- Functions can have [parameters]()
-- Functions have a return type
-- Functions can have a [where block]()
-- Functions can have a [value guard]()
-- Functions have a body
+- Functions can have [decorators](./decorators.md), that wrap the function in extra behaviour.
+- Functions can have [generic parameters & constraints]().
+- Functions can have [parameters]().
+- Functions have a return type.
+- Functions can have a [where block]().
+- Functions can have a [value guard]().
+- Functions have a body.
 
 ### Generic parameters & constraints
-- Functions can have generic parameters, defined after the function name
-- Generic types must not shadow enclosing an enclosing class's generic type names
-- Generic types can have constraints, defined after the generic type name, or in a `where` block
-- Optional and variadic generic types can be defined
+- Functions can have generic parameters, defined after the function name.
+- Generic types must not shadow enclosing an enclosing class's generic type names.
+- Generic types can have constraints, defined after the generic type name, or in a `where` block.
+- Optional and variadic generic types can be defined.
+#### Example
+```s++
+fn foo[T: std::Copy + std::ops::Add](a: &T, b: &T) -> T {
+    return a.copy() + b.copy();
+}
+```
 
 ### Decorators
 - See [decorating a method](./decorators.md)
@@ -62,15 +67,15 @@
 
 ### Value guard
 - Value guards are optional and follow the where clause in a function prototype.
-- Allows for runtime selection based on the value of parameters
-- Specified as a simplified if-statement
+- Allows for runtime selection based on the value of parameters.
+- Specified as a simplified if-statement.
 - If a value guard is used, there must be an unguarded function with an equivalent signature.
 - All functions with the same signature and different value guards must return the same type.
-  - Compiler must know return type at compile time
+  - Compiler must know the return type of a function at compile time.
 
 #### Example:
 ```s++
-fn foo[<T: std::ops::Gt[RHS=U], U>](a: T, b: U) -> std::Num if a > b {}
+fn foo[U, T: std::ops::Gt[RHS=U]](a: T, b: U) -> std::Num if a > b {}
 ```
 
 ## Function types
@@ -106,17 +111,17 @@ fn foo[<T: std::ops::Gt[RHS=U], U>](a: T, b: U) -> std::Num if a > b {}
   reserved based on function signatures.
 
 ```s++
-@meta::public
-fun add(a: std::Number, b: std::Number, c: std::Number, d: std::Number = 0) -> std::Number:
-    return a + b + c;
+fn add(a: std::Num, b: std::Num, c: std::Num, d: std::Num = 0) -> std::Num {
+    ret a + b + c;
+}
     
-@meta::public
-fun main():
+fn main() {
     let a = add(1, 2, _);
-    std::io::println(a(3)); # 6
+    std::io::println(a(3));  # 6
     
     let b = add(_, 2, _, _);
-    std::io::println(b(1, 3, 1)); # 7
+    std::io::println(b(1, 3, 1));  # 7
+}
 ```
 
 ## Variadic function, parameter packs
@@ -131,64 +136,15 @@ It can be called in the following ways:
 - `func_variadic_helper_0(...a);` -> calls `func_variadic_helper_0` with a single parameter pack
 - `func_variadic_helper_0(a);` -> calls `func_variadic_helper_0` with a single tuple type
 
-## Decorators (Definition protocols are going to change as this obviously doesn't work - partials etc)
-### Defining a decorator for a function
-- Changes `my_method` to `decorator1(&my_method, 123)`
-- Add functionality before and after the function is called
-```s++
-@meta::public
-fun decorator1<F: std::FunRef>(func: &F, a: std::Number) -> F::RetType:
-    std::io::println("decorator1 called - before function");
-    let val = func();
-    std::io::println("decorator1 called - after function");
-    return val + a;
 
-@decorator1(123),
-@meta::public
-fun my_method(a: std::Number) -> std::Number:
-    return a + 1;
-```
+## Function calling
+- Function calls are specified by the function name followed by parentheses.
+- Function arguments can have a parameter passing convention (none, `&`, or `&mut`).
+- Normal arguments must be specified in order before anything else.
+- Optional parameters can be in any order, as long as they are "named".
+- If there are required, optional and variadic parameters, then optional arguments must all be specified, unnamed,
+  before the variadic arguments.
 
-### Defining chained decorators for a function
-- Changes `my_method` to `decorator1(decorator2(&my_method, 456), 123)`
-- Add functionality before and after the function is called
-```s++
-@meta::public
-fun decorator1<F: std::FunRef>(func: &F, a: std::Number) -> F::return_type:
-    std::io::println("decorator1 called - before function");
-    let val = func();
-    std::io::println("decorator1 called - after function");
-    return val + a;
-
-@meta::public
-fun decorator2<F: std::FunRef>(func: &F, a: std::Number) -> F::return_type:
-    std::io::println("decorator2 called - before function");
-    let val = func();
-    std::io::println("decorator2 called - after function");
-    return val + a;
-
-@decorator1(123), @decorator2(456),
-@meta::public
-fun my_method(self: &self_t, a: std::Number) -> std::Number:
-    return a + 1;
-```
-
-### Defining a decorator for a class
-- Changes `Foo{attr: 1}` to `decorator1(Foo{attr: 1}, 123)`
-- Accept an already created class, and add functionality after the class is created
-- For a normal class, the decorator will return the instance of the class it received
-```s++
-@meta::public
-fun decorator1[T](class: T, a: std::Number) -> T:
-    class.attr = a;
-    std::io::println("decorator1 called");
-    return class;
-    
-@decorator1(123)
-@meta::public
-cls Foo:
-    attr: std::Number;
-```
 
 ## Other information
 #### Entry point to a program
@@ -201,14 +157,6 @@ fn main() -> Void {}
 - Implementation must be provided
 - Order of definition doesn't matter in a module
 
-#### Function calling (TODO : expand?)
-- Function calls are specified by the function name followed by parentheses
-- Function arguments can ave a parameter passing convention (none, &, or &mut)
-- Normal arguments must be specified in order before anything else
-- Optional parameters can be in any order, as long as they are "named"
-- If there are required, optional and variadic parameters, then optional arguments must all be specified, unnamed, 
-  before the variadic arguments
-
 #### Base class resolution
 - If two base classes have the same signature for a method, and these classes are inherited into a sub-class, that 
   doesn't override the method, then there is an ambiguity issue
@@ -217,13 +165,14 @@ fn main() -> Void {}
   - Override the method in the sub-class
   - Upcast the class to the correct super-type, and call the method on that => `std::upcast<A>(c).foo(1)`
 
-#### Pure functions
+#### Pure functions (TODO)
 - Pure functions that:
-  - Have no mutable parameters
-  - Don't call any functions that aren't pure
-- All C functions are modelled as impure
+  - Have no mutable parameters.
+  - Don't call any functions that aren't pure.
+- All C functions are modelled as impure.
+- The compiler knows when a function is "pure" and can apply optimisations.
 
 
 ## Other function features
-- [Struct methods]()
-- [Closure expressions]()
+- [Struct methods](./super-imposition.md)
+- [Closure expressions](./closures.md)

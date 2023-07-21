@@ -1,6 +1,7 @@
 # Closures
 - A closure is a function that can capture specified environment variables.
 - Define with simple syntax: `(x, y) -> x + y`.
+- Define with more complex syntax `(x, y) -> { ...; ret ...; }`
 
 ## Capturing
 - Allow variables to be captured from the environment in which the closure was defined.
@@ -14,6 +15,6 @@ let c = [&a, &b](x, y) -> (x + a + b) * y;
 ```
 
 ## Lambda Body
-- Single expression, where the value generated from the expression is returned.
-- Multiline lambdas are implemented by defining a nested function and calling it.
-- Multiline lambdas are not supported because there already exists a way to do it.
+- Because most statements are `<Expression>`s, the body of a closure is an expression.
+- The `<Expression>` might expand to a `<NewScope>` containing multiple statements.
+  - Multiline lambdas need to use the `ret` to output their value however (TODO).

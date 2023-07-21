@@ -1,87 +1,74 @@
 # Generics & Constraints
 ## Generics
 ### Overview of generics
-- Can be defined over a class or function
-- Can be used in the same way as any other type
-- Can be constrained to implement certain classes
-
----
+- Can be defined over a class, function/method or typedef.
+- Can be used in the same way as any other type.
+- Can be constrained to implement certain classes.
 
 ### Generic definitions
 #### Classes
 ```s++
-cls Vector[T]:
-    ...
+cls Vector[T] {}
 ```
 - The generic `T` is accessible to the entire class
 - The generic `T` can be constrained (see below)
 - Compile time check to ensure no methods shadow the generic type `T`
 - Attributes can use the generic type `T`
 
-<BR>
-
 #### Functions
 ```s++
-fun test_fun<U>(a: U):
-    ...
+fn test_fun[U](a: U) {}
 ```
 - The generic `U` is accessible to the entire function
 - The generic `U` can be constrained (see below)
 - Parameters, local variables, the return type, etc can use the generic type `U`
 
-<BR>
-
 #### Class methods
 ```s++
-sup[T] Vector[T]:
-    @meta::public
-    function emplace_back(self: &mut Self, value: T):
-        ...
+sup[T] Vector[T] {
+    fn emplace_back(self: &mut Self, value: T) {}
+}
 ```
 - The generic `T` is accessible to the method from the class
 - The generic `T` can be constrained specifically for this method with a `where` clause (see below)
 
-<BR>
-
-#### Sup definitions - see [super-imposing]()
+#### Sup definitions - see [super-imposition](./super-imposition.md)
 ```s++
-sup[T] Vector[T]:
-    ...
+sup[T] Vec[T] {}
 ```
 - Allows for super-imposing a class with a generic type
 - Can constrain the generic type `T` to implement methods when certain constraints are satisfied (see below)
 
-<BR>
-
 #### Enum definitions
 ```s++
-enum Foo[T]:
-    ...
+enum Foo[T] {}
 ```
 
----
-
-### Generic inference
+### Generic inference [TODO]
 #### Classes
 1. If an attribute has the same type as the generic type, the generic type can be inferred from the struct initializer
 2. If a static method uses generic type is used as a parameter, the generic type can be inferred from the parameter
 3. Otherwise, the generic type must be explicitly defined
 
 ```s++
-cls Wrapper[T]:
+cls Wrapper[T] {
     value: T;
+}
     
-sup[T] Wrapper[T]:
-    @std::static_method
-    pub fun new(value: T):
+sup[T] Wrapper[T] {
+    @meta::static_method
+    pub fun new(value: T) {
         let w = Wrapper{value: value};
+    }
+}
     
-fun main():
+fun main() {
     // 1. Inferred from the initializer
     let wrapper = Wrapper{value: 5};
     
     // 2. Inferred from the parameter
     let wrapper1 = Wrapper::new(5);
+}
 ```
 
 #### Functions
@@ -89,12 +76,12 @@ fun main():
 2. Otherwise, the generic type must be explicitly defined
 
 ```s++
-fun test_fun[T](a: T):
-    ...
+fun test_fun[T](a: T) {}
 
-fun main():
+fun main() {
     // 1. Inferred from the parameter
     test_fun(5);
+}
 ```
 
 #### Deferred inference
@@ -111,12 +98,14 @@ fun main():
 - Optional generic types can be assigned in any order
 
 ```s++
-cls Foo[T=std::Number, U=std::String]:
+cls Foo[T=std::Number, U=std::String] {
     a: T;
     b: U;
+}
     
-fun main():
+fun main() {
     let f = Foo[U=std::Number]{...};
+}
 ```
 - (In this case inference would be used to determine the type of `T` and `U`)
 
@@ -129,7 +118,7 @@ fun main():
 ```s++
 cls Foo;
 sup Foo:
-    pub fun new<...Ts>(...args: Ts);
+    pub fun new[...Ts](...args: Ts);
 ```
 
 ---
@@ -140,8 +129,6 @@ sup Foo:
 - Chain multiple constraints together with the `+` symbol
 - Can either be defined on the generic type, or in a `where` block
 - The `where` block is used to handle more complex constraints
-
-<BR>
 
 #### Constraints on the generic type
 - List constraints after the generic type, separated by a `+` symbol
@@ -158,18 +145,14 @@ sup [T: std::fmt::Display & std::ops::Add & std::ops::Sub] Wrapper[T] {
 }
 ```
 
-<BR>
-
 #### Constraints on optional and variadic generics work in the same way
-- Optional generics: `cls Foo[T:std::Number & std::Display = my::FormattableNumber]`
-- Variadic generics: `cls Foo[...Ts: std::Number & std::Display]` => all types in the variadic must implement the constraints
-
-<BR>
+- Optional generics: `cls Foo[T:std::Number & std::Display = my::FormattableNumber]`.
+- Variadic generics: `cls Foo[...Ts: std::Number & std::Display]` => all types in the variadic must implement the constraints.
 
 #### Constraints in a `where` block
-- Allows multiple types to be constrained to the same class
-- Allows a method to constrain a class to implement certain methods
-- Allows nested types on a generic to be constrained (provided the generic type is constrained such that the nested type exists)
+- Allows multiple types to be constrained to the same class.
+- Allows a method to constrain a class to implement certain methods.
+- Allows nested types on a generic to be constrained (provided the generic type is constrained such that the nested type exists).
 
 ```s++
 cls Wrapper[T, U] where [

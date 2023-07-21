@@ -23,17 +23,17 @@
 mod src.com.example.module1;
 
 # Import local structures.
-use src::data_structures::my_struct;
-use sup::utils::vector_tools -> vector_tools;
+use src::data_structures::MyStruct;
+use sup::utils::vec_tools::VecTools;
 
 # Import the vector and optional class from the standard library.
-use std::vector::vector;
-use std::optional::{optional, ok, some};
+use std::vec::Vec;
+use std::opt::Opt;
 
 # Import minecraft data structures from GitHub S++ project (cached locally).
-use vcs::minecraft::models::block::{block, block_state};
-use vcs::minecraft::particles::{particle, particle_type};
-use vcs::minecraft::models::entity::{entity, entity_type};
+use vcs::project1::models::{Model, Mesh};
+use vcs::project1::models::blocks::{Block, BlockState, BlockStateVariant};
+use vcs::project1::models::states::{State, StateVariant};
 
 # Import the lockers library from the lib folder.
 use lib::lockers::lockers;

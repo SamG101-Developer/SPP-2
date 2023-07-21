@@ -44,8 +44,8 @@
 - Use `std::cross_cast[T](...)` to cross-cast a variable: `let a = std::crosscast[T](b)?` (use `?` to handle the error)
 
 ## Variadic types
-- A generic looks like `[...Ts]`, then it is a variadic type - the pack using this type must be variadic ie `...args: Ts`
-- A variadic parameter must use this type - a single requires or optional parameter cannot be a variadic type
+- A generic looks like `[...Ts]`, then it is a variadic type -- the pack using this type must be variadic ie `...args: Ts`
+- A variadic parameter must use this type -- a single requires or optional parameter cannot be a variadic type
 - Variadic types can have the `::n` syntax applied, to get the nth type in the pack (where n is a number)
 - Variadic types can be in a `use` statement, but cannot be instantiated (used for type-checking)
 
@@ -77,3 +77,9 @@ function func_variadic_3<...Ts>(a: Ts):
 #### `Unit type`
 - The empty tuple - `()`
 - Can act as a placeholder type, but `std::Void` should be preferred
+
+
+## Type-aliasing
+- Use the `use` keyword to alias a type -- `use` is primary used to compile-time aliasing
+- Example: `use MyInt = std::Num`
+- Example: `use MyVec[T] = std::Vec[T]`

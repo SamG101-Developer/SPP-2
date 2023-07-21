@@ -1,34 +1,20 @@
 # Expressions
+- S++ has a reduced set of binary operators to reduce complexity, and uses other methods for more complex operations.
+- S++ also has no unary operators -- they are all implemented as methods on the type.
 
 ## Literals
-| Literal         | Example         | Description        | Default Type |
-|-----------------|-----------------|--------------------|--------------|
-| `Base02 Number` | `0b101010`      | Binary number      | `std::Num`   |
-| `Base16 Number` | `0xa2`          | Hexadecimal number | `std::Num`   |
-| `Base10 Number` | `42.4e+10`      | Decimal number     | `std::Num`   |
-| `String`        | `"Hello"`       | String             | `std::Str`   |
-| `Char`          | `'a'`           | Character          | `std::Char`  |
-| `Bool`          | `true`, `false` | Boolean            | `std::Bool`  |
-| `Tuple`         | `(1, 2, 3)`     | Tuple              | `std::Tup`   |
-| `Range`         | `1..10`         | Range              | `std::Range` |
+| Literal         | Example         | Description        | Default Type           |
+|-----------------|-----------------|--------------------|------------------------|
+| `Base02 Number` | `0b101010`      | Binary number      | `std::Num`             |
+| `Base16 Number` | `0xa2`          | Hexadecimal number | `std::Num`             |
+| `Base10 Number` | `42.4e+10`      | Decimal number     | `std::Num`             |
+| `String`        | `"Hello"`       | String             | `std::Str`             |
+| `Char`          | `'a'`           | Character          | `std::Char`            |
+| `Bool`          | `true`, `false` | Boolean            | `std::Bool`            |
+| `Tuple`         | `(1, 2)`        | Tuple              | `(std::Num, std::Num)` |
 - There is `Vec`, `Map` or `Set` literals, as variadic static methods can be used to construct types
 - Ie `std::Vec::new(...)`'s signature allows for variadic arguments
-
-## Primary Expressions
-| Primary Expression        | Description                                                       | Example        |
-|---------------------------|-------------------------------------------------------------------|----------------|
-| `Identifier`              | Some variable/function or type                                    | `variable_a`   |
-| `Literal`                 | Create a new instance of a type using shorthand                   | `[0, 1, 2]`    |
-| `ScopedGenericIdentifier` | Will be a namespaced type / function                              | `std::Str`     |
-| `Lambda`                  | Closure function allowing an expression                           | `(x) -> x + 1` |
-| `Parenthesized`           | Contain an expression to execute first                            | `(1 + 2)`      |
-| `Placeholder`             | Placeholders for match/case, partial functions etc                | `_`            |
-| `IfStatement`             | Last expression per branch is the returning value                 |                |
-| `MatchStatement`          | Last expression per case is the returning value                   |                |
-| `WhileStatement`          | Expression bound the the `break` statement is the returning value |                |
-| `ForStatement`            | Expression bound the the `break` statement is the returning value |                |
-| `DoWhileStatement`        | Expression bound the the `break` statement is the returning value |                |
-| `InnerScope`              | Last expression in the scope is the returning value               |                |
+- The tuple class is specialized and compiler known.
 
 ## Operators
 ### Operator Tables
@@ -68,10 +54,10 @@
 | Postfix Operator | Description                                                      |
 |------------------|------------------------------------------------------------------|
 | `()`             | Function call - Call a function with the given arguments         |
-| `[]`             | Index - Index into a collection with the given index             |
 | `{}`             | Initialize a class with the given arguments                      |
 | `.`              | Member access - Access a member of an object                     |
 | `?`              | Force unwrap - Unwrap an optional object (return error if error) |
+- In the parsing, some of these operators are passed separately to the `<PostfixOperator>` because they have to follow certain things, ie `{}` can only follow a `<TypeSingleIdentifier>` etc.
 
 
 ### Overloading operators
@@ -107,5 +93,5 @@
 | `std::ops::Try[T, E]` | `__try__`                           | Postfix `?`                      |
 | `std::ops::Del`       | `__del__`                           | Destructor                       |
 | `std::ops::With`      | `__enter__`, `__exit__`             | For the `with` statement         |
-| `std::ops::Rng`       | `__next__`                          | For the range literal ie `0..10` |
+- **Note:** There are more `std::ops` classes that have methods don't map to operators, ie `std::ops::Not` for a logical `not()`
 

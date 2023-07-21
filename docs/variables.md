@@ -1,12 +1,12 @@
 # Variables
 #### Declaring a variable
 - Declare a variable with the `let` keyword
-- Variable default to immutable - use `mut` to make mutable (see [mutability](#mutability))
+- Variable default to immutable - use `mut` to make mutable (see [**mutability**](./mutability))
 - Provide an expression, and the variable-type will be inferred: `let variable = a.b.c().d`
 - Provide no assignment, but a type - variable is unusable until assigned: `let variable: std::number`
 
 #### Multiple variable binding
-- Multiple variables can be defined at once throygh unpacking a tuple
+- Multiple variables can be defined at once through unpacking a tuple
 - If values are provided, the types can be different: `let a, b, c = (1, "two", '3')`
 - If no values are provided, the types must be the same: `let a, b, c: std::number`
 
@@ -26,12 +26,6 @@
 - Requires a type annotation to be provided: `let a: std::number`
 - Can be set later with `a = 5`
 
-#### Mutability
-- Default is immutable - safer
-- Change `let` to `let mut` to make mutable
-- Immutable variables can be assigned 1 time
-- Mutable variables can be assigned n times
-
 #### Re-declaring
 - Variables can be re-declared with the same or a different type
 - Variables re-declared in an inner-scope return to original type/value from outer-scope
@@ -40,9 +34,11 @@
 fun main():
     let x = 5;
     
-    with temp():
+    with temp() {
         let x = x + 10;
         std::io::print("inner scope: {x}");
+    };
+    
     std::io::print("outer scope: {x}");
 ```
 

@@ -25,3 +25,5 @@
 - Currently the parser requires `;` to follow statement `{}`, but hopefully this won't be the case in the end.
 - Iteration is incredibly difficult with 2nd class references -> update to stream-based API, remove the `for` loop.
 - Concurrency might need some more idea expansions on.
+- Enums are very underpowered right now, and need to be expanded on.
+

@@ -29,6 +29,10 @@
 - A borrow can be taken from a borrow at a function call site (collapses to a borrow of owned object)
 - A borrow cannot be taken from a partially moved object.
 
+### Lifetime analysis
+- Lifetime analysis isn't ever required, because borrows can only be active for a lifetime < the owner
+- The only check is to make sure the owned object being borrowed isn't moved / uninitialized.
+
 ### Partially moved objects
 - If some fields from an owned object are moved, then the object is in a "partially moved" state.
 - Borrows cannot be taken from partially moved objects because it's unsafe to do so.

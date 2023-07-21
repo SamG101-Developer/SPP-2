@@ -1,70 +1,40 @@
-# Concurrency
-## Coroutines & Generators
-- Coroutines are "full" -> stateful and first-class
+# Concurrency & Parallelism
+## Concurrency
+- Functions used for concurrency are marked as `gn` rather than `fn`
+- Functions marked `gn` return either `std::Gen[T]` or `std::Fut[T]` (see below)
+
+### Generators
+#### Overview
+- Generators are "full" -> stackless and first-class
 - Asymmetric -> one coroutine controls the other => semi-coroutines
-- Are the same as "generators" because of their semi-coroutine nature
+- Generator `gn` functions must return a type that super-imposes `std::Gen[T]`
 
-### Generator definition
-```s++
-# Standard function
-pub fn foo(a: std::Num) -> std::Str {
-    return a.to_str();
-}
+#### Calling
+- The `std::Gen[T]` is returned immediately, and the generator is not started.
+- The generator is started when the `next()` function is called on the `std::Gen[T]` object.
+- Every `std::Gen[T]::next()` yields a `std::Ret[T, std::GenErr]` object, which contains either the next value or an error.
+  - The `std::Gen[T]::next()` function can be called multiple times, and the generator will continue to run until it is finished.
+  - Returns an error when the generator is finished.
 
-# Generator
-pub gn foo(a: std::Num) -> std::Gen[std::Str] {
-    yield a.to_str();
-}
-```
+#### Yielding values from inside the generator
+- Use the `yield` keyword to yield a value from inside the generator.
+- Each `yield`'s expression's type must match, and be the `T` of the `std::Gen[T]` return type.
 
-### Generator operations
-#### Create
-- Call the generator as if it were a normal function
-- Returns the `std::Gen[T]` object
-- Call as `let gen = foo(5);`
-
-#### Next
-- Member function of `std::Gen[T]`
-- Returns a `std::Ret[T, std::GenErr]` object, because the generator could be dead
-- Call as `let x = gen.next();`
-
-#### Yield
-- Keyword that yields a value from inside the generator function
-- Can be called multiple times from inside the generator function
-- Call as `yield val;`
-
-
-## Async-Await
+### Async-Await
+#### Overview
 - Instead of returning `std::Gen[T]` from the `gn`, return `std::Fut[T]`
 - There is no `await` or `async` keyword or syntax, because coroutines do the same thing.
 - The `await` keyword is just a blocking op on the next generator value, i.e. call `std::Fut[T]::wait()` and wait.
 - This means that `async` isn't needed -- just define `gn` functions and call `wait()` on them.
-- Example of using `std::Fut[T]`:
-```s++
-pub gn download_data(url: std::Str) -> std::Fut[std::Str] {
-    let data = http::download(url);
-    return data;
-}
 
-pub fn main() {
-    let data = download_data("https://example.com").wait();
-    println(data);
-}
-```
-- Note
-  - There are no `yeild` statements, only a single return statement.
-  - The `download_data` is a `gn`, because the `std::Fut[T]` has to be returned instantly.
-
----
-
-# Parallelism
 ## Parallelism
-- Parallelism is the ability to run multiple tasks at the same time.
-- Parallelism is achieved by running multiple threads.
+### Threads & Mutexes
+#### Threads
+- Threads are created with the `std::thread::spawn()` function.
+- Threads are joined with the `std::thread::join()` function, but auto-join by default.
 
-### Threads
-- Threads are OS-level constructs that run code in parallel.
+#### Mutexes
+- Mutexes are created with the `std::mutex::new(T)` function.
+- Mutexes are locked with the `std::mutex::lock()` function.
 
-
-### Mutexes
 ### Channels

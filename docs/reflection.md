@@ -1,4 +1,4 @@
-# Reflection -- TODO
+# Reflection [TODO: Purely theoritically ideas right now]
 - Reflection is supported by leveraging the AST library, allowing AST inspection at runtime.
 - Getting and setting attributes is supported.
 - Method invocation is supported.
@@ -14,8 +14,9 @@
 ```s++
 let obj = Foo();
 let attr = "a";
-let val = std::rx::get_attr(obj, attr);
+let val = std::rx::get_attr(obj, attr, std::rx::Get::Ref);
 ```
+- The reference type will have to be valid for the type of object being accessed.
 
 #### Example: set_attr:
 ```s++

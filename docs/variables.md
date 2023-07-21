@@ -46,4 +46,9 @@ fun main():
 - If `x = x + 10` had been used instead of `let x = x + 10`, then `x == 15` in both scopes (would need `let mut`)
 - Re-declaring also allows a different type to be assigned to `x`
     - Assigning a new value to a `mut` variable requires the type matches the original type
-    - If `let a = 5;` is used, then anything on the rhs of `a =` must be a `std::Number`
+    - If `let a = 5;` is used, then anything on the rhs of `a =` must be a `std::Num`
+
+#### Residuals
+- Variables of types super-imposing `std::ops::Try` -- ie `std::Opt[T]`, `std::Ret[T, E]` etc -- can have early return with the `?` operator
+- They can also have an `else` block that allows for more manipulation -- see [**residuals**](./residuals)
+

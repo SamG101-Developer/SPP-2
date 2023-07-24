@@ -63,9 +63,9 @@ cls Foo {
 - This is the **ONLY** way to instantiate a class at the lowest level (can be wrapped by static methods etc).
 
 ```s++
-let foo = Foo {a: 1, b: 2, c: 3}; # specify all fields
+let foo = Foo {a=1, b=2, c=3}; # specify all fields
 let foo = Foo {a, b, c}; # where a, b, and c are defined local variables
-let bar = Foo {a: 3, else: foo}; # specify some fields, and fill in the rest with another object
+let bar = Foo {a=3, else=foo}; # specify some fields, and fill in the rest with another object
 ```
 
 - If `Foo` super-imposes `std::Default`, then `let baz = Foo{a: 3, else: Foo::default()}` allows for defaulting the variables and adjusting only the required ones.

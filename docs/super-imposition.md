@@ -32,7 +32,7 @@ sup Foo[T] {
     fn baz() -> Void {}
 }
 
-sup Foo[T: std::Default] {
+sup Foo[T: Default] {
     fn def() -> Void {}
 }
 ```
@@ -44,12 +44,12 @@ sup Foo[T: std::Default] {
 
 #### Override methods from the super-class
 - Required to give explicit control over which methods can be overridden.
-- Methods must be decorated with `@meta::virtual` in the super-class to allow a sub-class to override.
+- Methods must be decorated with `@meta.virtual` in the super-class to allow a sub-class to override.
 
 ```s++
 sup Bar {
-    @meta::virtual fn foo(self: &Self) -> Void {}
-    @meta::virtual fn bar(self: &Self) -> Void {}
+    @meta.virtual fn foo(self: &Self) -> Void {}
+    @meta.virtual fn bar(self: &Self) -> Void {}
 }
 
 sup Bar for Foo {
@@ -67,9 +67,9 @@ sup Bar for Foo {
 
 ```s++
 sup Bar[T] {
-    @meta::virtual fn foo(self: &Self) -> Void {}
-    @meta::virtual fn bar(self: &Self) -> Void {}
-    @meta::virtual fn baz(self: &Self) -> Void {}
+    @meta.virtual fn foo(self: &Self) -> Void {}
+    @meta.virtual fn bar(self: &Self) -> Void {}
+    @meta.virtual fn baz(self: &Self) -> Void {}
 }
 
 sup Bar[T: Copy] for Foo {

@@ -79,7 +79,7 @@ let bar = Foo {a=3, else=foo}; # specify some fields, and fill in the rest with 
 - Convention is to use `new` for the default initialization.
 
 ```s++
-let foo = Foo::new(1, 2, 3);
+let foo = Foo::new(1, 2, 3)
 ```
 
 ## self and Self

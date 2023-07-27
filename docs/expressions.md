@@ -65,33 +65,32 @@
 - Only the reference operator `&[mut]?` cannot be overloaded for a type
 - The function pipe operator must be implemented on the receiving type, not the argument type
 
-| Class                 | Magic methods                       | Description                      |
-|-----------------------|-------------------------------------|----------------------------------|
-| `std::ops::Add`       | `__add__`, `__add_assign__`         | Binary `+`                       |
-| `std::ops::Sub`       | `__sub__`, `__sub_assign__`         | Binary `-`                       |
-| `std::ops::Mul`       | `__mul__`, `__mul_assign__`         | Binary `*`                       |
-| `std::ops::Div`       | `__div__`, `__div_assign__`         | Binary `/`                       |
-| `std::ops::Mod`       | `__mod__`, `__mod_assign__`         | Binary `%`                       |
-| `std::ops::And`       | `__and__`, `__and_assign__`         | Binary `&&`                      |
-| `std::ops::Or`        | `__or__`, `__or_assign__`           | Binary `\|\|`                    |
-| `std::ops::BitNot`    | `__bit_not__`, `__bit_not_assign__` | Unary `~`                        |
-| `std::ops::BitAnd`    | `__bit_and__`, `__bit_and_assign__` | Binary `&`                       |
-| `std::ops::BitOr`     | `__bit_or__`, `__bit_or_assign__`   | Binary `\|`                      |
-| `std::ops::BitXor`    | `__bit_xor__`, `__bit_xor_assign__` | Binary `^`                       |
-| `std::ops::Eq`        | `__eq__`                            | Binary `==`                      |
-| `std::ops::Ne`        | `__ne__`                            | Binary `!=`                      |
-| `std::ops::Lt`        | `__lt__`                            | Binary `<`                       |
-| `std::ops::Le`        | `__le__`                            | Binary `<=`                      |
-| `std::ops::Gt`        | `__gt__`                            | Binary `>`                       |
-| `std::ops::Ge`        | `__ge__`                            | Binary `>=`                      |
-| `std::ops::Cmp`       | `__cmp__`                           | Binary `<=>`                     |
-| `std::ops::RPipe`     | `__rpip__`                          | Binary `\|>`                     |
-| `std::ops::LPipe`     | `__lpip__`                          | Binary `<\|`                     |
-| `std::func::FunOnce`  | `__call_once__`                     | Postfix call                     |
-| `std::func::FunRef`   | `__call_ref__`                      | Postfix call                     |
-| `std::func::FunMut`   | `__call_mut__`                      | Postfix call                     |
-| `std::ops::Try[T, E]` | `__try__`                           | Postfix `?`                      |
-| `std::ops::Del`       | `__del__`                           | Destructor                       |
-| `std::ops::With`      | `__enter__`, `__exit__`             | For the `with` statement         |
+| Class                 | Magic methods                       | Description              |
+|-----------------------|-------------------------------------|--------------------------|
+| `std::ops::Add`       | `__add__`, `__add_assign__`         | Binary `+`               |
+| `std::ops::Sub`       | `__sub__`, `__sub_assign__`         | Binary `-`               |
+| `std::ops::Mul`       | `__mul__`, `__mul_assign__`         | Binary `*`               |
+| `std::ops::Div`       | `__div__`, `__div_assign__`         | Binary `/`               |
+| `std::ops::Mod`       | `__mod__`, `__mod_assign__`         | Binary `%`               |
+| `std::ops::And`       | `__and__`, `__and_assign__`         | Binary `&&`              |
+| `std::ops::Or`        | `__or__`, `__or_assign__`           | Binary `\|\|`            |
+| `std::ops::BitAnd`    | `__bit_and__`, `__bit_and_assign__` | Binary `&`               |
+| `std::ops::BitOr`     | `__bit_or__`, `__bit_or_assign__`   | Binary `\|`              |
+| `std::ops::BitXor`    | `__bit_xor__`, `__bit_xor_assign__` | Binary `^`               |
+| `std::ops::Eq`        | `__eq__`                            | Binary `==`              |
+| `std::ops::Ne`        | `__ne__`                            | Binary `!=`              |
+| `std::ops::Lt`        | `__lt__`                            | Binary `<`               |
+| `std::ops::Le`        | `__le__`                            | Binary `<=`              |
+| `std::ops::Gt`        | `__gt__`                            | Binary `>`               |
+| `std::ops::Ge`        | `__ge__`                            | Binary `>=`              |
+| `std::ops::Cmp`       | `__cmp__`                           | Binary `<=>`             |
+| `std::ops::RPipe`     | `__rpip__`                          | Binary `\|>`             |
+| `std::ops::LPipe`     | `__lpip__`                          | Binary `<\|`             |
+| `std::func::Fn`       | `__call__`                          | Postfix call             |
+| `std::func::FnRef`    | `__call_ref__`                      | Postfix call             |
+| `std::func::FnMut`    | `__call_mut__`                      | Postfix call             |
+| `std::ops::Try[T, E]` | `__try__`                           | Postfix `?`              |
+| `std::ops::Del`       | `__del__`                           | Destructor               |
+| `std::ops::With`      | `__enter__`, `__exit__`             | For the `with` statement |
 - **Note:** There are more `std::ops` classes that have methods don't map to operators, ie `std::ops::Not` for a logical `not()`
 

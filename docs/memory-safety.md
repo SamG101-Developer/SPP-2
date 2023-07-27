@@ -12,8 +12,8 @@
 - Cannot be stored in a data structure
 - Can only be created at function call sites
   - `let a = foo(b)` is a move
-  - `let a = foo(&b);` is an immutable borrow
-  - `let a = foo(&mut b);` is a mutable borrow
+  - `let a = foo(&b)` is an immutable borrow
+  - `let a = foo(&mut b)` is a mutable borrow
 - Can only be received by a function parameter
   - `fun foo(a: A) -> Void {...}` receives an owned object
   - `fun foo(a: &A) -> Void {...}` receives an immutable borrow

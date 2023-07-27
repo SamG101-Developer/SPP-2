@@ -12,9 +12,9 @@
 
 #### Example: get_attr:
 ```s++
-let obj = Foo();
-let attr = "a";
-let val = std::rx::get_attr(obj, attr, std::rx::Get::Ref);
+let obj = Foo()
+let attr = "a"
+let val = rx.get_attr(obj, attr, rx.Get.Ref);
 ```
 - The reference type will have to be valid for the type of object being accessed.
 
@@ -23,14 +23,14 @@ let val = std::rx::get_attr(obj, attr, std::rx::Get::Ref);
 let obj = Foo();
 let attr = "a";
 let val = 2;
-std::rx::set_attr(obj, attr, val);
+rx.set_attr(obj, attr, val);
 ```
 
 #### Example: has_attr:
 ```s++
 let obj = Foo();
 let attr = "a";
-let val = std::rx::has_attr(obj, attr);
+let val = rx.has_attr(obj, attr);
 ```
 
 ### Invoking Methods
@@ -45,5 +45,5 @@ let val = std::rx::has_attr(obj, attr);
 let obj = Foo();
 let method = "foo";
 let args = (,);
-let result = std::rx::call(obj, method, ...args);
+let result = rx.call(obj, method, ...args);
 ```

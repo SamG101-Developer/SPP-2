@@ -14,7 +14,7 @@
 #### Calling
 - The `std::Gen[T]` / `std::Fut[T]` is returned immediately, and the generator is not started.
 - The generator is started when the `next(...)` function is called on the `std::Gen[T]` object.
-- Using the parameter allows values to be passed back to the coroutine (`let x = yield 123;`)
+- Using the parameter allows values to be passed back to the coroutine (`let x = yield 123`)
 - Every `std::Gen[T]::next()` yields a `std::Ret[T, std::GenErr]` object, which contains either the next value or an error.
   - The `std::Gen[T]::next()` function can be called multiple times, and the generator will continue to run until it is finished.
   - Returns an error when the generator is finished.

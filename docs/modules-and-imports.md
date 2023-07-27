@@ -2,14 +2,14 @@
 ## Module definition
 - The `mod` keyword defined the `.spp` file to be included in the compiler-tree.
 - The name of the module, including its directory structure, must be provided, and will be unique.
-- The module in the `src/com/ex/mods/m1.spp` folder will be tagged as `mod src::com::ex::mods::m1`
+- The module in the `src/com/ex/mods/m1.spp` folder will be tagged as `mod src.com.ex.mods.m1`
 - Directories in the compile-tree must all start with an alphabetic character, and cannot contain spaces.
 - Module names mirroring directory structure ensures uniqueness and no conflict.
 
 ### Visibility
-- Public modules, ie `@meta::public`, are accessible to any other module in the program.
-- Protected modules, ie `@meta::protected`, are accessible to only the current module -- same as Rust's `@meta::public(path="src")`.
-- Private modules, ie `@meta::private`, are included in the compile-tree but aren't accessible to any other module.
+- Public modules, ie `@meta.public`, are accessible to any other module in the program.
+- Protected modules, ie `@meta.protected`, are accessible to only the current module -- same as Rust's `@meta.public(path="src")`.
+- Private modules, ie `@meta.private`, are included in the compile-tree but aren't accessible to any other module.
 
 ### IDEs
 - IDEs will fill in the `mod` tag as part of the file template.
@@ -20,37 +20,37 @@
 - Use `sup` to import from the super module (parent directory).
 - Use `src` to refer to the root of the `src` folder.
 ```s++
-mod src.com.example.module1;
+mod src.com.example.module1
 
 # Import local structures.
-use src::data_structures::MyStruct;
-use sup::utils::vec_tools::VecTools;
+use src.data_structures.MyStruct
+use sup.utils.vec_tools.VecTools
 
 # Import the vector and optional class from the standard library.
-use std::vec::Vec;
-use std::opt::Opt;
+use std.vec.Vec
+use std.opt.Opt
 
 # Import minecraft data structures from GitHub S++ project (cached locally).
-use vcs::project1::models::{Model, Mesh};
-use vcs::project1::models::blocks::{Block, BlockState, BlockStateVariant};
-use vcs::project1::models::states::{State, StateVariant};
+use vcs.project1.models.{Model, Mesh}
+use vcs.project1.models.blocks.{Block, BlockState, BlockStateVariant}
+use vcs.project1.models.states.{State, StateVariant}
 
 # Import the lockers library from the lib folder.
-use lib::lockers::lockers;
+use lib.lockers.lockers
 ```
 - The automatic namespacing of types follows the module path, **but NOT including the filename**.
-  - `use std::vec::Vec;` will import the `Vec` class as `std::Vec`, **not** `std::vec::Vec`
+  - `use std.vec.Vec` will import the `Vec` class as `std.Vec`, **not** `std.vec.Vec`
 
 ### What can be imported
 #### Single type -- one of:
-- Import one type from a module by extending the `use` with another `::Type;`
-- Import one type inside a group of imports: `::{Type};`
+- Import one type from a module by extending the `use` with another `.Type`
+- Import one type inside a group of imports: `.{Type}`
 
 #### Multiple types:
-- Import multiple types inside an import group: `::{Type1, Type2};`
+- Import multiple types inside an import group: `.{Type1, Type2}`
 
 #### All types:
-- Import all types from a module: `::*;`
+- Import all types from a module: `.*`
 
 ### Import locations
 | Folder tag | Description                                                             |

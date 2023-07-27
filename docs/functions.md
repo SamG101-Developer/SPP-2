@@ -15,8 +15,8 @@
 - Optional and variadic generic types can be defined.
 #### Example
 ```s++
-fn foo[T: std::Copy + std::ops::Add](a: &T, b: &T) -> T {
-    return a.copy() + b.copy();
+fn foo[T: Copy + ops::Add](a: &T, b: &T) -> T {
+    ret a.copy() + b.copy()
 }
 ```
 
@@ -38,7 +38,7 @@ fn foo[T: std::Copy + std::ops::Add](a: &T, b: &T) -> T {
 #### Variadic parameters
 - There can be a single variadic parameter, which must be the last parameter.
 - It can either have a variadic type (all types can be different), or a single type that all the arguments must be.
-- Fix all parameters to `std::Num` types: `func[T](...args: std::Num)`.
+- Fix all parameters to `Num` types: `func[T](...args: Num)`.
 - Fix all parameters to the same `T` generic type: `func[T](...args: T)`.
 - Allow all parameters to be different generic types: `func[...Ts](...args: Ts)`.
 - Effectively the same as Python's `*args`, just replace `*` with `...`.
@@ -51,7 +51,7 @@ fn foo[T: std::Copy + std::ops::Add](a: &T, b: &T) -> T {
 
 ### Return type
 - Functions must have a return type.
-- Returning nothing must return `std::Void` (return types are not optional).
+- Returning nothing must return `Void` (`std.Void`) -> return types are not optional.
 
 ### Where block
 - Additional constraints to generic parameters can be specified in a where block.
@@ -61,8 +61,8 @@ fn foo[T: std::Copy + std::ops::Add](a: &T, b: &T) -> T {
 - See [Where block type constraints]() for more information.
 
 #### Example of converting into constrained generics:
-- `fn foo(a: std::Num, b: std::Num) -> std::Num {}`.
-- `fn foo[T, U](a: T, b: U) -> std::Num where [T: std::Num, U: std::Num] {}`.
+- `fn foo(a: Num, b: Num) -> Num {}`.
+- `fn foo[T, U](a: T, b: U) -> Num where [T: Num, U: Num] {}`.
 - Using generics allows multiple constraints to be specified on a single type.
 
 ### Value guard
@@ -75,15 +75,15 @@ fn foo[T: std::Copy + std::ops::Add](a: &T, b: &T) -> T {
 
 #### Example:
 ```s++
-fn foo[U, T: std::ops::Gt[RHS=U]](a: T, b: U) -> std::Num if a > b {}
+fn foo[U, T: ops::Gt[RHS=U]](a: T, b: U) -> Num if a > b {}
 ```
 
 ## Function types
-- 3 function types in the STL - `std::Fn`, `std::FnMut`, `std::FnOnce` (same as Rust)
-- `std::FnRef` is the default function type -> `self` is an immutable reference: `self: &Self`
-- `std::FnMut` -> `self` is a mutable reference: `self: &mut Self`
-- `std::FnOnce` -> `self` is moved into the function (self-consuming)
-- Free function / static method -> `self` is not defined => use `std::FnRef` as it takes no ownership of `self`
+- 3 function types in the STL - `Fn`, `FnMut`, `FnOnce` (same as Rust)
+- `FnRef` is the default function type -> `self` is an immutable reference: `self: &Self`
+- `FnMut` -> `self` is a mutable reference: `self: &mut Self`
+- `Fn` -> `self` is moved into the function (self-consuming)
+- Free function / static method -> `self` is not defined => use `FnRef` as it takes no ownership of `self`
 
 ## Function overloading
 ### What differentiates functions => allows for overloading
@@ -111,16 +111,16 @@ fn foo[U, T: std::ops::Gt[RHS=U]](a: T, b: U) -> std::Num if a > b {}
   reserved based on function signatures.
 
 ```s++
-fn add(a: std::Num, b: std::Num, c: std::Num, d: std::Num = 0) -> std::Num {
-    ret a + b + c;
+fn add(a: Num, b: Num, c: Num, d: Num = 0) -> Num {
+    ret a + b + c
 }
     
 fn main() {
-    let a = add(1, 2, _);
-    std::io::println(a(3));  # 6
+    let a = add(1, 2, _)
+    io::println(a(3))  # 6
     
-    let b = add(_, 2, _, _);
-    std::io::println(b(1, 3, 1));  # 7
+    let b = add(_, 2, _, _)
+    io::println(b(1, 3, 1))  # 7
 }
 ```
 
@@ -128,13 +128,12 @@ fn main() {
 ### Variadic function call
 Take the following function:
 ```s++
-function func_variadic_helper_0[T](...a: T) -> std::void:
-    ...
+function func_variadic_helper_0[T](...a: T) -> Void {}
 ```
 
 It can be called in the following ways:
-- `func_variadic_helper_0(...a);` -> calls `func_variadic_helper_0` with a single parameter pack
-- `func_variadic_helper_0(a);` -> calls `func_variadic_helper_0` with a single tuple type
+- `func_variadic_helper_0(...a)` -> calls `func_variadic_helper_0` with a single parameter pack
+- `func_variadic_helper_0(a)` -> calls `func_variadic_helper_0` with a single tuple type
 
 
 ## Function calling
@@ -163,7 +162,7 @@ fn main() -> Void {}
 - Any attempt to call the method will result in a compile time error
 - 2 ways to resolve:
   - Override the method in the sub-class
-  - Upcast the class to the correct super-type, and call the method on that => `std::upcast<A>(c).foo(1)`
+  - Upcast the class to the correct super-type, and call the method on that => `upcast<A>(c).foo(1)`
 
 #### Pure functions (TODO)
 - Pure functions that:

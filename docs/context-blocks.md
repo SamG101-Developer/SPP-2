@@ -15,8 +15,8 @@
 ```s++
 fn test() -> Void {
     with std::File::open("foo.txt") as file {
-        file.write("Hello, world!");
-        file.read() |> std::print;
+        file.write("Hello, world!")
+        file.read() |> std::print
     }
 }
 ```

@@ -14,13 +14,13 @@
 #### Binary folding
 ```s++
 fn function(...args: std::Num) -> std::Num {
-    return 0 + ... + args;
+    return 0 + ... + args
 }
 ```
 
 #### Unary folding
 ```s++
 fn function(...args: std::Num) -> std::Num {
-    return ... && args;
+    return ... && args
 }
 ```

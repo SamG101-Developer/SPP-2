@@ -8,7 +8,7 @@
 ## Coroutines
 - Coroutines can yield references, because they have to be resumed, thereby ensuring the memory safety.
 - Coroutines are denoted by `gn` rather than `fn`, telling the compiler that the return value must be immediately#
-  returned, like an `std::Gen[T]` or an `std::Fut[T]`.
+  returned, like an `Gen[T]` or an `Fut[T]`.
 - Use a coroutine to yield a reference to the current element, and resume the iterator.
 
 ### Example: indexing

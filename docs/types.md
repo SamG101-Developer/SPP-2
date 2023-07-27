@@ -5,6 +5,10 @@
 - Every value is type-inferred
 - Explicit type annotations have to be used for uninitialized variables
 
+### Type names vs variable names
+- Type names: must start with a capital letter
+- Variable names: must start with a lowercase letter
+
 ## Primitives vs Objects
 - No primitives in S++
 - Everything inherits from `std::Obj` - this is never explicitly stated in code

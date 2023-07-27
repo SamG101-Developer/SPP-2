@@ -1,16 +1,16 @@
 # Mutability
 ## Variables
-- `let x = 1`: `x` is an immutable `std::Num`. It cannot have its value changed. Because it is immutable, `&mut`
-  mutable references cannot be taken, meaning that methods of `std::Num` that use `self: &mut Self` cannot be used
+- `let x = 1`: `x` is an immutable `Num`. It cannot have its value changed. Because it is immutable, `&mut`
+  mutable references cannot be taken, meaning that methods of `Num` that use `self: &mut Self` cannot be used
   either.
-- `let mut x = 1`: `x` is a mutable `std::Num`. It can have its value changed. Because it is mutable, `&mut` mutable
-  references can be taken, meaning that methods of `std::Num` that use `self: &mut Self` can be used.
+- `let mut x = 1`: `x` is a mutable `Num`. It can have its value changed. Because it is mutable, `&mut` mutable
+  references can be taken, meaning that methods of `Num` that use `self: &mut Self` can be used.
 
 ## Members
 ```s++
 cls A {
-    mut x: std::Num;
-    y: std::Str;
+    mut x: Num
+    y: Str
 }
 ```
 - `x` can only be changed if the type of `A` being used is `mut`.

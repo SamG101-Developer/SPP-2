@@ -98,13 +98,13 @@ fun main() {
 - Optional generic types can be assigned in any order
 
 ```s++
-cls Foo[T=std::Number, U=std::String] {
+cls Foo[T=Number, U=String] {
     a: T;
     b: U;
 }
     
 fun main() {
-    let f = Foo[U=std::Number]{...};
+    let f = Foo[U=Number]{...};
 }
 ```
 - (In this case inference would be used to determine the type of `T` and `U`)
@@ -116,9 +116,9 @@ fun main() {
 - This allows for a parameter back to contain multiple different types
 
 ```s++
-cls Foo;
+cls Foo {}
 sup Foo:
-    pub fun new[...Ts](...args: Ts);
+    fn new[...Ts](...args: Ts) {}
 ```
 
 ---
@@ -134,20 +134,21 @@ sup Foo:
 - List constraints after the generic type, separated by a `+` symbol
 - Constraints are checked at compile time
 ```s++
-cls Wrapper[T: std::fmt::Display & std::ops::Add & std::ops::Sub] {
-    value: T;
+cls Wrapper[T: fmt::Display & ops::Add & ops::Sub] {
+    value: T
 }
     
-sup [T: std::fmt::Display & std::ops::Add & std::ops::Sub] Wrapper[T] {
-    @std::static_method
-    pub fun new(value: T):
-        let w = Wrapper{value: value};
+sup [T: fmt::Display & ops::Add & ops::Sub] Wrapper[T] {
+    @static_method
+    fun new(value: T) {
+        let w = Wrapper{value: value}
+    }
 }
 ```
 
 #### Constraints on optional and variadic generics work in the same way
-- Optional generics: `cls Foo[T:std::Number & std::Display = my::FormattableNumber]`.
-- Variadic generics: `cls Foo[...Ts: std::Number & std::Display]` => all types in the variadic must implement the constraints.
+- Optional generics: `cls Foo[T: Number & Display = my::FormattableNumber]`.
+- Variadic generics: `cls Foo[...Ts: Number & Display]` => all types in the variadic must implement the constraints.
 
 #### Constraints in a `where` block
 - Allows multiple types to be constrained to the same class.
@@ -156,10 +157,10 @@ sup [T: std::fmt::Display & std::ops::Add & std::ops::Sub] Wrapper[T] {
 
 ```s++
 cls Wrapper[T, U] where [
-        T: std::vector,
-        T::ValueType, U: std::fmt::Display {
-    value: T;
-    other: U;
+        T: vector,
+        T::ValueType, U: fmt::Display {
+    value: T
+    other: U
 }
 ```
 
@@ -168,24 +169,24 @@ cls Wrapper[T, U] where [
 #### Constraints on a `sup` definition
 - Any constraints on the class must also be defined on every the `sup` block.
 - Allows a class to be super-imposed _only when certain constraints are satisfied on the generic type_.
-- For example, if a generic implements the `std::Default`, then more method that utilize the `std::Default` can be used.
+- For example, if a generic implements the `Default`, then more method that utilize the `Default` can be used.
 
 ```s++
-cls Wrapper[T: std::Display] {
-    value: T;
+cls Wrapper[T: Display] {
+    value: T
 }
     
-sup[T: std::Display] Wrapper[T] {
-    @std::static_method
-    pub fun new(value: T) {
-        let w = Wrapper{value: value};
+sup[T: Display] Wrapper[T] {
+    @static_method
+    fn new(value: T) {
+        let w = Wrapper{value: value}
     }
 }
 
-sup[T: std::Display & std::Default] Wrapper[T] {    
-    pub fun new_default() {
+sup[T: Display & Default] Wrapper[T] {    
+    fn new_default() {
         return Wrapper{value: T::__def__()};
     }
 }
 ```
-- Only if `T` implements `std::Default` can the `new_default` method be used.
+- Only if `T` implements `Default` can the `new_default` method be used.

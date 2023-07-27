@@ -19,7 +19,7 @@
 #### Example:
 ```s++
 fn foo() -> Num {
-    ret 1;
+    ret 1
 }
 ```
 

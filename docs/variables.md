@@ -3,12 +3,12 @@
 - Declare a variable with the `let` keyword
 - Variable default to immutable - use `mut` to make mutable (see [**mutability**](./mutability))
 - Provide an expression, and the variable-type will be inferred: `let variable = a.b.c().d`
-- Provide no assignment, but a type - variable is unusable until assigned: `let variable: std::number`
+- Provide no assignment, but a type - variable is unusable until assigned: `let variable: Num`
 
 #### Multiple variable binding
 - Multiple variables can be defined at once through unpacking a tuple
 - If values are provided, the types can be different: `let a, b, c = (1, "two", '3')`
-- If no values are provided, the types must be the same: `let a, b, c: std::number`
+- If no values are provided, the types must be the same: `let a, b, c: Num`
 
 #### More values on RHS than LHS
 - If there are more values on the RHS than LHS, then there is an error, as there are too many values to unpack
@@ -23,7 +23,7 @@
 
 #### Declaring a variable with no value
 - Uninitialized and cannot be used until set
-- Requires a type annotation to be provided: `let a: std::number`
+- Requires a type annotation to be provided: `let a: Num`
 - Can be set later with `a = 5`
 
 #### Re-declaring
@@ -32,23 +32,23 @@
 
 ```s++
 fun main():
-    let x = 5;
+    let x = 5
     
     with temp() {
-        let x = x + 10;
-        std::io::print("inner scope: {x}");
+        let x = x + 10
+        io::print("inner scope: {x}")
     };
     
-    std::io::print("outer scope: {x}");
+    io::print("outer scope: {x}")
 ```
 
 - Because a redeclaration was used, `x == 15` in the inner scope, but `x == 5` in the outer scope
 - If `x = x + 10` had been used instead of `let x = x + 10`, then `x == 15` in both scopes (would need `let mut`)
 - Re-declaring also allows a different type to be assigned to `x`
     - Assigning a new value to a `mut` variable requires the type matches the original type
-    - If `let a = 5;` is used, then anything on the rhs of `a =` must be a `std::Num`
+    - If `let a = 5;` is used, then anything on the rhs of `a =` must be a `Num`
 
 #### Residuals
-- Variables of types super-imposing `std::ops::Try` -- ie `std::Opt[T]`, `std::Ret[T, E]` etc -- can have early return with the `?` operator
+- Variables of types super-imposing `ops::Try` -- ie `Opt[T]`, `Ret[T, E]` etc -- can have early return with the `?` operator
 - They can also have an `else` block that allows for more manipulation -- see [**residuals**](./residuals)
 

@@ -14,12 +14,12 @@
 ### Common issues mitigated
 #### Null safety
 - No concept of "pointers", as they are abstracted away into owned objects and "borrows".
-- Residual-holding types - `std::Opt[T]` and `std::Ret[T]` - are used to represent the possibility of a value not existing.
+- Residual-holding types - `Opt[T]` and `Ret[T]` - are used to represent the possibility of a value not existing.
 - Ownership tracking ensures that uninitialized or moved objects aren't used.
 
 #### Buffer overflows
-- All low-level memory access is bound checked in the `std::MemSeq[T]` class (from `std::Alloc[T]`).
-- Bound checks can result in errors -> return `std::Ret[T, std::MemErr]` type.
+- All low-level memory access is bound checked in the `MemSeq[T]` class (from `Alloc[T]`).
+- Bound checks can result in errors -> return `Ret[T, MemErr]` type.
 - Storing the length of the sequence in the object allows for bounds checking to be performed.
 
 #### Use after free & Double free
@@ -36,14 +36,14 @@
 - Mutexes unlock shared objects to only 1 is every used at one time.
 
 ### Solutions
-#### Residual-holding types - `std::Opt[T]` and `std::Ret[T]`
-- `std::Opt[T]` is used to represent the possibility of a value not existing.
-- `std::Ret[T]` is used to represent the possibility of an error occurring.
+#### Residual-holding types - `Opt[T]` and `Ret[T]`
+- `Opt[T]` is used to represent the possibility of a value not existing.
+- `Ret[T]` is used to represent the possibility of an error occurring.
 - Reduces the need to defensively check for null values.
 
 #### Second-class references
 - References can only be taken at a call-site, and received at a function parameter.
-- References can be "yielded" from coroutines, as the following `std::Gen[T]::next` will invalidate the reference.
+- References can be "yielded" from coroutines, as the following `Gen[T]::next` will invalidate the reference.
 
 #### Region based memory management
 - Owned objects that fall out of scope are automatically freed.

@@ -38,17 +38,17 @@ public class SppAnnotator implements Annotator {
                 setHighlighting(element, holder, SppSyntaxHighlighter.DECORATOR_IDENTIFIER);
             }
 
-            @Override
-            public void visitTypeGenericParameterIdentifier(@NotNull SppTypeGenericParameterIdentifier element) {
-                super.visitTypeGenericParameterIdentifier(element);
-                setHighlighting(element, holder, SppSyntaxHighlighter.GENERIC_PARAMETER_IDENTIFIER);
-            }
-
-            @Override
-            public void visitFunctionParameterIdentifier(@NotNull SppFunctionParameterIdentifier element) {
-                super.visitFunctionParameterIdentifier(element);
-                setHighlighting(element, holder, SppSyntaxHighlighter.FUNCTION_PARAMETER_IDENTIFIER);
-            }
+//            @Override
+//            public void visitTypeGenericParameterIdentifier(@NotNull SppTypeGenericParameterIdentifier element) {
+//                super.visitTypeGenericParameterIdentifier(element);
+//                setHighlighting(element, holder, SppSyntaxHighlighter.GENERIC_PARAMETER_IDENTIFIER);
+//            }
+//
+//            @Override
+//            public void visitFunctionParameterIdentifier(@NotNull SppFunctionParameterIdentifier element) {
+//                super.visitFunctionParameterIdentifier(element);
+//                setHighlighting(element, holder, SppSyntaxHighlighter.FUNCTION_PARAMETER_IDENTIFIER);
+//            }
 
             @Override
             public void visitPostfixOperatorMemberAccess(@NotNull SppPostfixOperatorMemberAccess element) {
@@ -56,11 +56,11 @@ public class SppAnnotator implements Annotator {
                 setHighlighting(element.getLastChild(), holder, SppSyntaxHighlighter.MEMBER_IDENTIFIER);
             }
 
-            @Override
-            public void visitFunctionCallNamedArgumentIdentifier(@NotNull SppFunctionCallNamedArgumentIdentifier element) {
-                super.visitFunctionCallNamedArgumentIdentifier(element);
-                setHighlighting(element, holder, SppSyntaxHighlighter.FUNCTION_NAMED_ARG_IDENTIFIER);
-            }
+//            @Override
+//            public void visitFunctionCallNamedArgumentIdentifier(@NotNull SppFunctionCallNamedArgumentIdentifier element) {
+//                super.visitFunctionCallNamedArgumentIdentifier(element);
+//                setHighlighting(element, holder, SppSyntaxHighlighter.FUNCTION_NAMED_ARG_IDENTIFIER);
+//            }
         });
     }
 

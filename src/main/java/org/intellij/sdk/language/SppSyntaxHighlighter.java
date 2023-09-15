@@ -18,8 +18,8 @@ public class SppSyntaxHighlighter extends SyntaxHighlighterBase {
     public static TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey("SPP_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
     public static TextAttributesKey OPERATION_SIGN = TextAttributesKey.createTextAttributesKey("SPP_OPERATION_SIGN", DefaultLanguageHighlighterColors.OPERATION_SIGN);
     public static TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("SPP_STRING", DefaultLanguageHighlighterColors.STRING);
-    public static TextAttributesKey LINE_COMMENT = TextAttributesKey.createTextAttributesKey("SPP_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-    public static TextAttributesKey BLOCK_COMMENT = TextAttributesKey.createTextAttributesKey("SPP_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
+    public static TextAttributesKey LINE_COMMENT = TextAttributesKey.createTextAttributesKey("SPP_LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+    public static TextAttributesKey BLOCK_COMMENT = TextAttributesKey.createTextAttributesKey("SPP_BLOCK_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
     public static TextAttributesKey NUMBER = TextAttributesKey.createTextAttributesKey("SPP_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
 
     public static TextAttributesKey FUNCTION_IDENTIFIER = TextAttributesKey.createTextAttributesKey("SPP_FUNCTION_IDENTIFIER", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
